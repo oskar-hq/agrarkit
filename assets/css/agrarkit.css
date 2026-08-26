@@ -1,0 +1,762 @@
+/* ===========================================================================
+   Agrarkit — Website
+   Baut auf dem Designsystem der Anwendung auf ("Feldtauglich"). Die Tokens
+   sind aus _ds_bundle.css uebernommen, damit Website und Anwendung dieselbe
+   Sprache sprechen: derselbe Papiergrund, dasselbe Gruen, dieselben Radien,
+   dieselben Kulturfarben.
+
+   Ergaenzt sind nur die Bausteine, die eine Anwendung nicht braucht und eine
+   Website schon: Held, Abschnittsrhythmus, Bildkarten, Preis, Fragen.
+
+   Die Anwendung setzt Titel auf 34 px. Eine Startseite traegt weiter und
+   bekommt deshalb eine eigene, groessere Skala — gleiche Bauart (Gewicht 500,
+   eng gesperrt), nur lauter.
+   =========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Schrift
+   --------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/SpaceGrotesk-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/SpaceGrotesk-Medium.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/SpaceGrotesk-SemiBold.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/SpaceGrotesk-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* ---------------------------------------------------------------------------
+   Tokens
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* Flaechen */
+  --grund:        #FBF7F1;
+  --flaeche:      #FFFFFF;
+  --antikweiss:   #FAEBD7;
+
+  /* Glas */
+  --glas:         rgba(255,255,255,.66);
+  --glas-stark:   rgba(255,255,255,.74);
+  --glas-kante:   rgba(255,255,255,.60);
+  --glas-blur:    blur(28px) saturate(1.3);
+
+  /* Linien */
+  --linie:        rgba(38,57,47,.16);
+  --linie-zart:   rgba(38,57,47,.09);
+
+  /* Text — Verhaeltnisse gegen --grund, aus dem Designsystem uebernommen */
+  --ink:          #26392F;                 /* 11,5:1 */
+  --ink-leise:    rgba(38,57,47,.79);      /*  6,0:1 */
+  --ink-still:    rgba(38,57,47,.70);      /*  4,6:1 */
+  --ink-nichttext:rgba(38,57,47,.45);      /* nur Icons und Haarlinien */
+
+  /* Farbe mit Bedeutung */
+  --gruen:        #26392F;
+  --gruen-zart:   rgba(38,57,47,.06);
+  --rot:          #781F19;
+  --rot-zart:     rgba(120,31,25,.10);
+
+  /* Kulturfarben — auf der Website als Akzente, in derselben Reihenfolge
+     wie in der Kartenlegende der Anwendung. */
+  --kultur-weizen: #26392F;
+  --kultur-gerste: #B98A2E;
+  --kultur-raps:   #781F19;
+  --kultur-hafer:  #8A6446;
+  --kultur-mais:   #6E9578;
+
+  /* Masse */
+  --tap: 44px;
+  --r-s: 8px;
+  --r-m: 20px;
+  --r-l: 28px;
+  --r-pille: 999px;
+
+  /* Schatten — nur an schwebenden Dingen */
+  --schatten-leiste: 0 12px 26px -14px rgba(38,57,47,.40);
+  --schatten-panel:  0 20px 40px -18px rgba(38,57,47,.45);
+  --schatten-sheet:  0 50px 90px -30px rgba(38,57,47,.50);
+  --schatten-knopf:  0 16px 34px -12px rgba(38,57,47,.60);
+
+  /* Bewegung */
+  --kurve-sheet: cubic-bezier(.32,.72,0,1);
+  --kurve-weich: cubic-bezier(.4,0,.2,1);
+
+  /* Nur fuer die Website */
+  --huelle:   1200px;   /* Inhaltsbreite */
+  --rand:     24px;     /* Seitenrand */
+  --luft:     clamp(72px, 9vw, 128px);   /* Abstand zwischen Abschnitten */
+}
+
+/* Dunkelmodus — abgeleitet, nicht invertiert. Werte aus dem Designsystem. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --grund:        #171E1A;
+    --flaeche:      #1F2723;
+    --antikweiss:   #2A2118;
+    --glas:         rgba(31,39,35,.66);
+    --glas-stark:   rgba(31,39,35,.78);
+    --glas-kante:   rgba(251,247,241,.10);
+    --linie:        rgba(251,247,241,.18);
+    --linie-zart:   rgba(251,247,241,.10);
+    --ink:          #F1EDE6;
+    --ink-leise:    rgba(241,237,230,.72);
+    --ink-still:    rgba(241,237,230,.60);
+    --ink-nichttext:rgba(241,237,230,.42);
+    --gruen:        #8FBFA2;
+    --gruen-zart:   rgba(143,191,162,.12);
+    --rot:          #E08C7E;
+    --rot-zart:     rgba(224,140,126,.14);
+    --kultur-weizen: #8FBFA2;
+    --kultur-gerste: #D9AB5B;
+    --kultur-raps:   #E08C7E;
+    --kultur-hafer:  #C39B77;
+    --kultur-mais:   #6E9578;
+    --schatten-leiste: 0 12px 26px -14px rgba(0,0,0,.70);
+    --schatten-panel:  0 20px 40px -18px rgba(0,0,0,.75);
+    --schatten-sheet:  0 50px 90px -30px rgba(0,0,0,.80);
+    --schatten-knopf:  0 16px 34px -12px rgba(0,0,0,.80);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Grundlagen
+   --------------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Damit ein Sprungziel nicht unter der klebenden Kopfleiste landet. */
+  scroll-padding-top: 84px;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--grund);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Ziffern in Zahlenreihen muessen untereinander stehen — wie in der Anwendung. */
+.zahl, .kennzahl-wert, .held-zahl strong, .preis-zahl { font-variant-numeric: tabular-nums; }
+
+img, svg, video { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--gruen); text-decoration-color: color-mix(in srgb, var(--gruen) 35%, transparent); }
+a:hover { text-decoration-color: currentColor; }
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--gruen);
+  outline-offset: 2px;
+  border-radius: var(--r-s);
+}
+
+/* `hidden` muss verstecken — dieselbe Regel wie im Designsystem. */
+[hidden]:not([hidden="until-found"]) { display: none !important; }
+
+/* Zum Inhalt springen: erst sichtbar, wenn die Tastatur ihn erreicht. */
+.zum-inhalt {
+  position: absolute; left: 12px; top: -100px; z-index: 100;
+  padding: 10px 16px; border-radius: var(--r-m);
+  background: var(--gruen); color: var(--grund);
+  font-size: .9rem; font-weight: 600; text-decoration: none;
+  transition: top 160ms var(--kurve-weich);
+}
+.zum-inhalt:focus { top: 12px; }
+
+/* ---------------------------------------------------------------------------
+   Typografie
+
+   Die Anwendung setzt Titel auf 34/500. Hier traegt eine Ueberschrift eine
+   ganze Bildschirmhoehe, deshalb eine eigene Skala — gleiche Bauart, nur
+   groesser. Gewicht bleibt 500: 600 liess jede Ueberschrift wie eine Warnung
+   wirken (Anmerkung aus dem Designsystem, gilt hier genauso).
+   --------------------------------------------------------------------------- */
+
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; font-weight: 500; letter-spacing: -.025em; }
+
+/* Untergrenze 2,25 rem (36 px) und nicht 2,5: bei 40 px brach die Zeile auf
+   einem 390-px-Display fuenfmal um und „Programm." stand allein. 36 px
+   liegen dicht am Titelmass der Anwendung (34 px) und ergeben vier Zeilen. */
+.titel-held  { font-size: clamp(2.25rem, 6.2vw, 4.5rem); line-height: 1.02; letter-spacing: -.035em; }
+.titel-gross { font-size: clamp(1.95rem, 3.9vw, 3rem);   line-height: 1.1; }
+.titel-mittel{ font-size: clamp(1.35rem, 2.1vw, 1.75rem); line-height: 1.2; }
+.titel-klein { font-size: 1.0625rem; line-height: 1.35; letter-spacing: -.015em; font-weight: 600; }
+
+p { margin: 0; text-wrap: pretty; }
+
+.fliess    { font-size: 1.0625rem; color: var(--ink-leise); line-height: 1.6; }
+.fliess-gross { font-size: clamp(1.0625rem, 1.6vw, 1.25rem); color: var(--ink-leise); line-height: 1.55; }
+.nebentext { color: var(--ink-leise); font-size: .9rem; }
+.still     { color: var(--ink-still); }
+.mass      { max-width: 62ch; }
+.mass-eng  { max-width: 46ch; }
+
+/* Augenbraue: die kleine Zeile ueber einer Ueberschrift. Masse aus dem
+   Logo-Material uebernommen, damit Website und Marketingmaterial gleich
+   aussehen. */
+.augenbraue {
+  display: block;
+  font-size: .75rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-still);
+}
+
+/* Marke: kleine Zustandsmarke, wie in der Anwendung. */
+.marke {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .69rem; font-weight: 600; letter-spacing: .03em;
+  padding: .22em .6em; border-radius: var(--r-pille);
+  background: var(--gruen-zart); color: var(--ink-leise);
+  white-space: nowrap;
+}
+.marke-gruen { background: var(--gruen-zart); color: var(--gruen); }
+
+/* ---------------------------------------------------------------------------
+   Raster
+   --------------------------------------------------------------------------- */
+
+.huelle {
+  width: 100%; max-width: var(--huelle);
+  margin-inline: auto; padding-inline: var(--rand);
+}
+.huelle-breit { max-width: 1440px; }
+
+.abschnitt { padding-block: var(--luft); }
+.abschnitt-eng { padding-block: calc(var(--luft) * .62); }
+
+/* Abschnittskopf: Augenbraue, Titel, Beschreibung. Standard linksbuendig,
+   mit `.mitte` zentriert. */
+.abschnitt-kopf { display: flex; flex-direction: column; gap: 14px; margin-bottom: 52px; }
+.abschnitt-kopf .fliess-gross { max-width: 58ch; }
+.abschnitt-kopf.mitte { align-items: center; text-align: center; }
+.abschnitt-kopf.mitte .fliess-gross { margin-inline: auto; }
+
+/* ---------------------------------------------------------------------------
+   Knoepfe — Bauart aus dem Designsystem, nur etwas groesser fuer die Website
+   --------------------------------------------------------------------------- */
+
+.knopf {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: var(--tap); padding: 0 20px;
+  font: inherit; font-size: .95rem; font-weight: 600;
+  color: var(--ink); background: var(--flaeche);
+  border: 1px solid var(--linie); border-radius: var(--r-m);
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background 120ms var(--kurve-weich), border-color 120ms var(--kurve-weich),
+              transform 120ms var(--kurve-weich);
+}
+.knopf:hover { border-color: var(--ink-still); }
+.knopf:active { transform: translateY(1px); }
+
+.knopf-primaer {
+  background: var(--gruen); border-color: var(--gruen); color: var(--grund);
+  box-shadow: var(--schatten-leiste);
+}
+.knopf-primaer:hover {
+  background: color-mix(in srgb, var(--gruen) 88%, var(--grund));
+  border-color: color-mix(in srgb, var(--gruen) 88%, var(--grund));
+}
+.knopf-still { background: transparent; border-color: transparent; color: var(--ink-leise); }
+.knopf-still:hover { background: var(--gruen-zart); border-color: transparent; color: var(--ink); }
+.knopf-gross { min-height: 52px; padding: 0 26px; font-size: 1rem; }
+.knopf-reihe { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+/* Auf dunklem Grund (Held ueber Foto, CTA-Band) kehrt sich das Paar um. */
+.auf-dunkel .knopf-primaer {
+  background: var(--grund); border-color: var(--grund); color: #26392F;
+}
+.auf-dunkel .knopf-primaer:hover { background: #fff; border-color: #fff; }
+.auf-dunkel .knopf:not(.knopf-primaer) {
+  background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.42); color: #FBF7F1;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.auf-dunkel .knopf:not(.knopf-primaer):hover { background: rgba(255,255,255,.18); border-color: #FBF7F1; }
+.auf-dunkel :where(a, button):focus-visible { outline-color: #FBF7F1; }
+
+/* ---------------------------------------------------------------------------
+   Kopfleiste — Glas, klebt oben. Wie in der Anwendung, damit der Wechsel
+   zur Anwendung kein Bruch ist.
+   --------------------------------------------------------------------------- */
+
+.kopf {
+  position: sticky; top: 0; z-index: 40;
+  padding-top: env(safe-area-inset-top);
+  background: color-mix(in srgb, var(--grund) 72%, transparent);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border-bottom: 1px solid var(--linie-zart);
+}
+.kopf-innen {
+  display: flex; align-items: center; gap: 26px;
+  min-height: 64px;
+}
+
+.marke-wort {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-weight: 600; font-size: 17px; letter-spacing: -.02em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+}
+.marke-wort svg { width: 30px; height: 30px; flex: none; }
+
+.kopf-nav { display: flex; gap: 24px; align-items: center; }
+.kopf-nav a {
+  font-size: 14.5px; font-weight: 400; color: var(--ink-leise);
+  text-decoration: none; white-space: nowrap;
+  transition: color 120ms var(--kurve-weich);
+}
+.kopf-nav a:hover { color: var(--ink); }
+
+.kopf-rechts { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+
+/* Unter 900 px verschwindet die Navigation in ein <details>-Menue. Kein
+   JavaScript: aufklappen kann der Browser selbst. */
+.kopf-menue { display: none; position: relative; }
+.kopf-menue > summary {
+  list-style: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--tap); height: var(--tap);
+  border-radius: var(--r-m); border: 1px solid var(--linie);
+  background: var(--flaeche); color: var(--ink);
+}
+.kopf-menue > summary::-webkit-details-marker { display: none; }
+.kopf-menue > summary svg { width: 18px; height: 18px; }
+.kopf-menue[open] > summary .strich-zu { display: none; }
+.kopf-menue:not([open]) > summary .strich-x { display: none; }
+
+.menue-blatt {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 50;
+  min-width: 200px; display: flex; flex-direction: column;
+  padding: 6px; border-radius: var(--r-m);
+  background: var(--grund);
+  border: 1px solid var(--linie-zart); box-shadow: var(--schatten-panel);
+  animation: menue-auf 160ms var(--kurve-weich);
+  transform-origin: top right;
+}
+.menue-blatt a {
+  padding: 10px 12px; border-radius: var(--r-s); font-size: 15px;
+  color: var(--ink); text-decoration: none;
+}
+.menue-blatt a:hover { background: var(--gruen-zart); }
+@keyframes menue-auf { from { opacity: 0; transform: scale(.98); } to { opacity: 1; transform: none; } }
+
+/* Geschlossene Menues ausdruecklich wegnehmen — absolut positionierte Kinder
+   eines zugeklappten <details> entkommen sonst je nach Browser. */
+details:not([open]) > .menue-blatt { display: none; }
+
+/* ---------------------------------------------------------------------------
+   Held
+   --------------------------------------------------------------------------- */
+
+.held { padding-top: clamp(28px, 4vw, 52px); padding-bottom: var(--luft); }
+
+.held-bild {
+  position: relative; isolation: isolate;
+  border-radius: var(--r-l); overflow: hidden;
+  min-height: clamp(460px, 62vh, 660px);
+  display: flex; align-items: flex-end;
+  box-shadow: var(--schatten-panel);
+}
+.held-bild > img {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover;
+}
+/* Verlauf, damit der Text auf jedem Bildausschnitt traegt — nicht Deko,
+   sondern die Bedingung fuer Lesbarkeit.
+
+   Zwei Verlaeufe, nicht einer: der senkrechte allein reichte nicht. Die
+   Ueberschrift steht auf halber Hoehe und lag dort teilweise auf hellem
+   Wolkenhimmel — gemessen unter 4,5:1. Der waagerechte Verlauf senkt genau
+   die Seite ab, auf der Text steht, und laesst die rechte Bildhaelfte mit
+   dem Schlepper hell. */
+.held-bild::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(to top, rgba(14,22,17,.86) 0%, rgba(14,22,17,.62) 34%, rgba(14,22,17,.30) 62%, rgba(14,22,17,.18) 100%),
+    linear-gradient(to right, rgba(14,22,17,.80) 0%, rgba(14,22,17,.62) 42%, rgba(14,22,17,.20) 68%, rgba(14,22,17,0) 88%);
+}
+.held-inhalt {
+  padding: clamp(28px, 4.5vw, 60px);
+  display: flex; flex-direction: column; gap: 22px; align-items: flex-start;
+  max-width: 780px; color: #FBF7F1;
+}
+.held-inhalt .augenbraue { color: rgba(251,247,241,.82); }
+.held-inhalt .fliess-gross { color: rgba(251,247,241,.90); max-width: 54ch; }
+.held-fuss { font-size: .85rem; color: rgba(251,247,241,.72); }
+
+/* Streifen mit Zahlen unter dem Held. */
+.streifen {
+  display: grid; gap: 1px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--linie-zart);
+  border: 1px solid var(--linie-zart);
+  border-radius: var(--r-m); overflow: hidden;
+  margin-top: 22px;
+}
+.streifen > div {
+  background: var(--grund);
+  padding: 22px 24px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.streifen dt { font-size: .82rem; color: var(--ink-still); order: 2; }
+.streifen dd {
+  margin: 0; order: 1;
+  font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   Karten
+   --------------------------------------------------------------------------- */
+
+.raster { display: grid; gap: 20px; }
+.raster-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.raster-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Panel: Glas mit Haarlinie — die Bauform der Anwendung fuer alles,
+   was schwebt. */
+.panel {
+  background: var(--glas);
+  backdrop-filter: var(--glas-blur); -webkit-backdrop-filter: var(--glas-blur);
+  border: 1px solid var(--linie-zart); border-radius: var(--r-m);
+  box-shadow: var(--schatten-panel);
+  padding: 28px;
+}
+
+.funktion { display: flex; flex-direction: column; gap: 12px; }
+.funktion-zeichen {
+  width: 42px; height: 42px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-s);
+  background: var(--gruen-zart); color: var(--gruen);
+  margin-bottom: 4px;
+}
+.funktion-zeichen svg { width: 21px; height: 21px; }
+.funktion p { color: var(--ink-leise); font-size: .95rem; }
+
+/* Bildkarte: Foto mit Verlauf, Titel unten — wie im Gestaltungsvorbild. */
+.bildkarte {
+  position: relative; isolation: isolate;
+  border-radius: var(--r-m); overflow: hidden;
+  min-height: 320px; display: flex; align-items: flex-end;
+  color: #FBF7F1; text-decoration: none;
+}
+.bildkarte > img {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 600ms var(--kurve-weich);
+}
+/* Gemessen, nicht geschaetzt: mit .42 auf halber Hoehe lag der Kartentitel
+   ueber dem hellen Getreidefoto bei 3,4:1 und damit unter den 4,5:1, die
+   dieses Projekt fuer Text zusagt. Nachzustellen, indem man den Text
+   ausblendet und den hellsten Grundpunkt unter dem Textkasten misst. */
+.bildkarte::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, rgba(14,22,17,.92) 0%, rgba(14,22,17,.74) 34%, rgba(14,22,17,.34) 72%, rgba(14,22,17,.12) 100%);
+}
+.bildkarte:hover > img { transform: scale(1.04); }
+.bildkarte-inhalt { padding: 26px; display: flex; flex-direction: column; gap: 8px; }
+.bildkarte-inhalt p { color: rgba(251,247,241,.86); font-size: .93rem; }
+.bildkarte .augenbraue { color: rgba(251,247,241,.75); }
+
+/* ---------------------------------------------------------------------------
+   Schaufenster: Text neben oder ueber einem Bildschirmfoto
+   --------------------------------------------------------------------------- */
+
+.schaufenster { display: grid; gap: clamp(32px, 4.5vw, 64px); align-items: center; }
+.schaufenster-zwei { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.35fr); }
+/* Fuer Aufnahmen, die als Ganzes wirken (der Zeichendialog) und nicht auf
+   eine einzelne Tabelle zugeschnitten sind: mehr Platz fuer das Bild. */
+.schaufenster-bildlastig { grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.5fr); }
+/* Umgedreht: Bild links, Text rechts. Nur die Malreihenfolge aendert sich,
+   die Reihenfolge im Quelltext bleibt sinnvoll fuer Vorlesewerkzeuge.
+
+   Mit `order` wechseln die beiden auch die SPALTE — der Text landet in der
+   breiten, das Bild in der schmalen. Beim ersten Bauen war die zugeschnittene
+   Tabelle dadurch 441 statt 647 px breit und nicht mehr zu lesen. Die
+   Spaltenbreiten muessen also mitgedreht werden. */
+.schaufenster-gedreht { grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.92fr); }
+.schaufenster-gedreht > .schaufenster-text { order: 2; }
+
+.schaufenster-text { display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
+.schaufenster-text .fliess { max-width: 46ch; }
+
+/* Rahmen um ein Bildschirmfoto — eine Haarlinie und ein Schatten, mehr nicht.
+   Der Rundungsradius entspricht dem der Anwendung, damit das Foto wie ein
+   Fenster wirkt und nicht wie ein Ausriss. */
+/* Rahmen schrumpft auf die Aufnahme, hoechstens aber auf die Spaltenbreite.
+   So wird ein zugeschnittenes Bildschirmfoto nie ueber seine eigene
+   Aufloesung hinaus gezogen — hochskaliert sieht es matschig aus, und
+   ausgerechnet bei den zugeschnittenen ist die Lesbarkeit der Tabelle der
+   ganze Zweck. Breitere Aufnahmen fuellen die Spalte wie zuvor. */
+.schirm {
+  width: fit-content; max-width: 100%; margin-inline: auto;
+  border-radius: var(--r-m); overflow: hidden;
+  border: 1px solid var(--linie-zart);
+  box-shadow: var(--schatten-panel);
+  background: var(--grund);
+  margin-block: 0;
+}
+.schirm img { display: block; width: auto; max-width: 100%; }
+
+figure.schirm-mit-text { margin: 0; }
+.schirm-bildunterschrift {
+  margin-top: 12px; font-size: .85rem; color: var(--ink-still);
+}
+
+/* ---------------------------------------------------------------------------
+   Haken-Liste
+   --------------------------------------------------------------------------- */
+
+.haken { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.haken li { display: flex; gap: 12px; align-items: flex-start; font-size: .98rem; color: var(--ink-leise); }
+.haken li::before {
+  content: ""; flex: none;
+  width: 21px; height: 21px; margin-top: 2px;
+  border-radius: var(--r-pille);
+  background: var(--gruen-zart) var(--haken-bild) center / 12px no-repeat;
+  --haken-bild: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2326392F' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5 6.2 11.8 13 5'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark) {
+  .haken li::before {
+    --haken-bild: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%238FBFA2' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5 6.2 11.8 13 5'/%3E%3C/svg%3E");
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Kulturstreifen — die Farben der Kartenlegende als Zierleiste
+   --------------------------------------------------------------------------- */
+
+.kulturstreifen { display: flex; gap: 8px; margin-bottom: 4px; }
+.kulturstreifen span { height: 5px; border-radius: var(--r-pille); }
+.kulturstreifen span:nth-child(1) { width: 74px; background: var(--kultur-weizen); }
+.kulturstreifen span:nth-child(2) { width: 48px; background: var(--kultur-gerste); }
+.kulturstreifen span:nth-child(3) { width: 32px; background: var(--kultur-raps); }
+.kulturstreifen span:nth-child(4) { width: 22px; background: var(--kultur-hafer); }
+.kulturstreifen span:nth-child(5) { width: 22px; background: var(--kultur-mais); }
+
+/* ---------------------------------------------------------------------------
+   Preis
+   --------------------------------------------------------------------------- */
+
+.preis {
+  display: grid; gap: clamp(28px, 4vw, 56px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+}
+.preis-panel {
+  background: var(--gruen); color: var(--grund);
+  border-radius: var(--r-l); padding: clamp(30px, 4vw, 46px);
+  display: flex; flex-direction: column; gap: 20px; align-items: flex-start;
+  box-shadow: var(--schatten-panel);
+}
+.preis-panel .augenbraue { color: rgba(251,247,241,.72); }
+@media (prefers-color-scheme: dark) {
+  .preis-panel { color: #171E1A; }
+  .preis-panel .augenbraue { color: rgba(23,30,26,.66); }
+}
+.preis-zahl { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.preis-zahl strong {
+  font-size: clamp(3rem, 7vw, 4.5rem); font-weight: 500;
+  letter-spacing: -.04em; line-height: 1;
+}
+.preis-zahl span { font-size: 1rem; opacity: .8; }
+.preis-panel .haken li { color: inherit; opacity: .92; }
+.preis-panel .haken li::before {
+  background-color: rgba(251,247,241,.16);
+  --haken-bild: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23FBF7F1' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5 6.2 11.8 13 5'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark) {
+  .preis-panel .haken li::before {
+    background-color: rgba(23,30,26,.16);
+    --haken-bild: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23171E1A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5 6.2 11.8 13 5'/%3E%3C/svg%3E");
+  }
+}
+.preis-panel .knopf-primaer {
+  background: var(--grund); border-color: var(--grund); color: #26392F;
+  box-shadow: none;
+}
+.preis-panel .knopf-primaer:hover { background: #fff; border-color: #fff; }
+@media (prefers-color-scheme: dark) {
+  .preis-panel .knopf-primaer { background: #171E1A; border-color: #171E1A; color: #8FBFA2; }
+  .preis-panel .knopf-primaer:hover { background: #0E1411; border-color: #0E1411; }
+}
+.preis-panel :where(a, button):focus-visible { outline-color: var(--grund); }
+
+/* ---------------------------------------------------------------------------
+   Fragen — <details>, ohne JavaScript
+   --------------------------------------------------------------------------- */
+
+.fragen { border-top: 1px solid var(--linie-zart); }
+.frage { border-bottom: 1px solid var(--linie-zart); }
+.frage > summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
+  padding: 22px 0; min-height: var(--tap);
+  font-size: 1.0625rem; font-weight: 500; letter-spacing: -.015em;
+  color: var(--ink);
+}
+.frage > summary::-webkit-details-marker { display: none; }
+.frage > summary:hover { color: var(--gruen); }
+/* Das Zeichen dreht sich beim Aufklappen — eine Bewegung, die sagt, was
+   passiert ist. */
+.frage > summary::after {
+  content: ""; flex: none; width: 20px; height: 20px; margin-top: 3px;
+  background: var(--zeichen) center / contain no-repeat;
+  --zeichen: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2326392F' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M10 4v12M4 10h12'/%3E%3C/svg%3E");
+  transition: transform 200ms var(--kurve-weich);
+}
+.frage[open] > summary::after { transform: rotate(135deg); }
+@media (prefers-color-scheme: dark) {
+  .frage > summary::after {
+    --zeichen: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23F1EDE6' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M10 4v12M4 10h12'/%3E%3C/svg%3E");
+  }
+}
+.frage-text { padding: 0 40px 26px 0; max-width: 68ch; color: var(--ink-leise); }
+.frage-text p + p { margin-top: 12px; }
+
+/* ---------------------------------------------------------------------------
+   Aufruf-Band
+   --------------------------------------------------------------------------- */
+
+.band {
+  position: relative; isolation: isolate;
+  border-radius: var(--r-l); overflow: hidden;
+  padding: clamp(48px, 7vw, 96px) clamp(28px, 5vw, 72px);
+  display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center;
+  color: #FBF7F1;
+}
+.band > img {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.band::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, rgba(14,22,17,.88), rgba(14,22,17,.66));
+}
+.band .fliess-gross { color: rgba(251,247,241,.88); max-width: 52ch; }
+.band .augenbraue { color: rgba(251,247,241,.75); }
+
+/* ---------------------------------------------------------------------------
+   Fusszeile
+   --------------------------------------------------------------------------- */
+
+.fuss {
+  border-top: 1px solid var(--linie-zart);
+  padding-block: 56px 40px;
+  margin-top: var(--luft);
+}
+.fuss-raster {
+  display: grid; gap: 40px;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+}
+.fuss-marke { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+.fuss-marke p { color: var(--ink-still); font-size: .92rem; max-width: 34ch; }
+.fuss h2 {
+  font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-still); margin-bottom: 14px;
+}
+.fuss ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.fuss ul a { color: var(--ink-leise); text-decoration: none; font-size: .95rem; }
+.fuss ul a:hover { color: var(--ink); text-decoration: underline; }
+.fuss-adresse { font-style: normal; color: var(--ink-leise); font-size: .95rem; line-height: 1.7; }
+.fuss-unten {
+  margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--linie-zart);
+  display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center;
+  font-size: .85rem; color: var(--ink-still);
+}
+.fuss-unten .trenner { margin-left: auto; }
+
+/* ---------------------------------------------------------------------------
+   Rechtstexte (Impressum, Datenschutz)
+   --------------------------------------------------------------------------- */
+
+.rechtstext { max-width: 74ch; padding-block: clamp(48px, 6vw, 88px) 0; }
+.rechtstext > * + * { margin-top: 18px; }
+.rechtstext h1 { margin-bottom: 8px; }
+.rechtstext h2 {
+  font-size: 1.25rem; margin-top: 48px; padding-top: 24px;
+  border-top: 1px solid var(--linie-zart);
+}
+.rechtstext h3 { font-size: 1.0625rem; font-weight: 600; margin-top: 28px; }
+.rechtstext p, .rechtstext li { color: var(--ink-leise); }
+.rechtstext ul, .rechtstext ol { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+.rechtstext address { font-style: normal; color: var(--ink-leise); line-height: 1.8; }
+.rechtstext .stand { font-size: .88rem; color: var(--ink-still); }
+
+/* Offener Punkt: muss auffallen, damit er nicht so veroeffentlicht wird. */
+.offen {
+  border: 1px dashed var(--rot); border-radius: var(--r-m);
+  background: var(--rot-zart); color: var(--ink);
+  padding: 16px 18px; font-size: .92rem;
+}
+.offen strong { color: var(--rot); }
+
+/* ---------------------------------------------------------------------------
+   Schmale Bildschirme
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+  .raster-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .schaufenster-zwei { grid-template-columns: minmax(0, 1fr); }
+  .schaufenster-gedreht > .schaufenster-text { order: 0; }
+  .preis { grid-template-columns: minmax(0, 1fr); }
+  .fuss-raster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fuss-marke { grid-column: 1 / -1; }
+}
+
+@media (max-width: 900px) {
+  .kopf-nav, .kopf-rechts .nur-breit { display: none; }
+  .kopf-menue { display: block; }
+}
+
+@media (max-width: 700px) {
+  :root { --rand: 20px; }
+  .raster-3, .raster-2 { grid-template-columns: minmax(0, 1fr); }
+  .streifen { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .held-bild { min-height: clamp(420px, 74vh, 560px); }
+  .knopf-reihe > .knopf { flex: 1 1 100%; }
+  .fuss-unten .trenner { margin-left: 0; flex-basis: 100%; }
+}
+
+@media (max-width: 460px) {
+  .streifen { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------------------------------------------------------------------------
+   Druck
+   --------------------------------------------------------------------------- */
+
+@media print {
+  .kopf, .band, .zum-inhalt { display: none; }
+  body { background: #fff; color: #000; }
+  .rechtstext { max-width: none; }
+}
