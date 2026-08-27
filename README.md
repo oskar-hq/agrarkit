@@ -38,6 +38,34 @@ Abschnittsrhythmus, Bildkarten, Preis, Fragen. Die Anwendung setzt Titel auf
 Dunkelmodus und `prefers-reduced-motion` sind aus demselben Designsystem
 übernommen.
 
+## Bewegung
+
+`assets/js/bewegung.js`, rund 130 Zeilen, keine Abhängigkeiten. Drei Effekte:
+Einblenden beim Hereinrollen mit Staffelung, sanfte Parallaxe im Held, und
+eine Kopfleiste, die beim Rollen eine Kante bekommt. Dazu klappen die Fragen
+weich auf.
+
+Alles läuft auf `--kurve-sheet` — derselben Kurve, die die Anwendung für ihre
+Sheets benutzt. Bewegt werden ausschließlich `opacity` und `transform`, damit
+nichts das Layout neu berechnet.
+
+Drei Bedingungen, die beim Ändern nicht fallen dürfen:
+
+- **Ohne JavaScript ist alles sichtbar.** Der Ausgangszustand hängt an
+  `html.js`, gesetzt von einem Einzeiler im `<head>` *vor* dem Stylesheet.
+  Steht er danach, blitzt der Inhalt kurz auf, bevor die Blende zugeht.
+- **`prefers-reduced-motion: reduce` schaltet alles ab**, nicht nur die Dauer.
+- **Bricht etwas, wird die Blende weggenommen** — der `catch`-Zweig im Skript
+  entfernt `html.js` wieder. Lieber ohne Bewegung als mit unsichtbarem Inhalt.
+
+Die Liste der Elemente steht als `--blende-ziele` im Stylesheet und wird vom
+Skript zur Laufzeit ausgelesen, damit Ausgangszustand und Beobachtung nicht
+auseinanderlaufen. Direkt darunter steht dieselbe Liste als Regel — beide
+zusammen ändern.
+
+Gemessen nach dem Einbau: Layoutsprünge (CLS) 0,0007, Median 16,7 ms je Bild
+über die ganze Seite, kein Bild über 33 ms.
+
 ## Hosting: GitHub Pages
 
 Die Seite liegt auf GitHub Pages. Zwei Dinge sind deshalb Absicht und sollten
@@ -76,8 +104,15 @@ einzige Punkt, der unter der `github.io`-Adresse nicht funktioniert.
 
 ## Was noch offen ist
 
-- **Bildnachweise** der drei Landschaftsfotos im Impressum — Fotograf bzw.
-  Portal und Lizenzart. Der Kasten dort ist rot markiert, damit er auffällt.
+- **Das Personenfoto in „Ein Ansprechpartner".** `landwirt.webp` zeigt einen
+  erkennbaren Menschen von Pixabay. Die Lizenz erlaubt die kommerzielle
+  Nutzung, nimmt aber ausdrücklich aus, dass Abbildungen erkennbarer Personen
+  so verwendet werden, dass eine Zustimmung oder Verbindung unterstellt wird —
+  und genau das legt die Karte nahe, weil daneben steht, die E-Mail lande
+  „direkt bei dem, der die Software baut". Wer das liest, hält den Abgebildeten
+  für Oskar Jacobsen. Zwei saubere Wege: ein eigenes Foto an die Stelle setzen
+  (für diese Karte ohnehin die bessere Lösung), oder auf ein Bild ohne
+  erkennbare Person wechseln.
 - **Data Privacy Framework.** Die Datenschutzerklärung stützt die Übermittlung
   an GitHub in die USA auf die DPF-Zertifizierung von GitHub, Inc. Die muss
   jährlich erneuert werden — einmal im Jahr auf

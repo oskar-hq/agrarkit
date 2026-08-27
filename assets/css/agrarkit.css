@@ -752,10 +752,127 @@ figure.schirm-mit-text { margin: 0; }
 }
 
 /* ---------------------------------------------------------------------------
+   Bewegung
+
+   Zurueckhaltend und in eine Richtung: Dinge kommen von unten herein und
+   bleiben dann liegen. Nichts federt, nichts dreht sich, nichts wandert
+   quer. Die Kurve ist --kurve-sheet aus dem Designsystem — lange, weiche
+   Verzoegerung ohne Ueberschwingen; genau die Bauart, die die Anwendung
+   schon fuer ihre Sheets benutzt.
+
+   Drei Bedingungen, die nicht verhandelbar sind:
+   - Ohne JavaScript ist alles sichtbar. Der Ausgangszustand haengt an
+     `html.js`, und diese Klasse setzt erst ein Skript.
+   - Bei `prefers-reduced-motion: reduce` faellt jede Bewegung aus, nicht
+     nur ihre Dauer — die Blende geht dann gar nicht erst zu.
+   - Bewegt werden nur `opacity` und `transform`. Beides laeuft im
+     Compositor und loest kein Neuberechnen des Layouts aus; auf einem
+     aelteren Handy im Schlepper ist das der Unterschied zwischen weich
+     und ruckelig.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* Diese Liste liest bewegung.js zur Laufzeit aus — sie steht deshalb hier
+     und nicht im Skript. Die Regel darunter muss dieselbe Liste tragen;
+     beide zusammen aendern. */
+  --blende-ziele: .held-inhalt > *, .streifen, .abschnitt-kopf > *, .raster > *, .schaufenster-text > *, .schirm, .preis-panel, .band > :not(img), .frage, .fuss-raster > *;
+}
+
+.js .held-inhalt > *,
+.js .streifen,
+.js .abschnitt-kopf > *,
+.js .raster > *,
+.js .schaufenster-text > *,
+.js .schirm,
+.js .preis-panel,
+.js .band > :not(img),
+.js .frage,
+.js .fuss-raster > * {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+}
+
+.ist-blende {
+  transition:
+    opacity 800ms var(--kurve-sheet) var(--verzug, 0ms),
+    transform 800ms var(--kurve-sheet) var(--verzug, 0ms);
+}
+
+.ist-da { opacity: 1 !important; transform: none !important; }
+
+/* Bildschirmfotos kommen zusaetzlich aus einer Spur Ferne heran. */
+.js .schirm { transform: translate3d(0, 26px, 0) scale(.985); }
+
+/* Der Held liegt beim Laden schon im Bild und soll nicht warten. */
+.js .held-inhalt > * { transform: translate3d(0, 14px, 0); }
+
+/* Parallaxe: das Bild laeuft langsamer als die Seite. Der Massstab gibt den
+   Vorrat, aus dem die Verschiebung genommen wird — ohne ihn zeigte sich am
+   Rand ein Streifen Grund. */
+.js .held-bild > img { transform: scale(1.16); will-change: transform; }
+
+/* Kopfleiste: solange die Seite ganz oben steht, braucht sie keine Kante.
+   Erst beim Rollen wird sie zur Leiste, die auf etwas liegt. */
+.kopf {
+  transition: background-color 240ms var(--kurve-weich),
+              border-color 240ms var(--kurve-weich),
+              box-shadow 240ms var(--kurve-weich);
+  border-bottom-color: transparent;
+}
+.kopf.ist-gerollt {
+  background: color-mix(in srgb, var(--grund) 82%, transparent);
+  border-bottom-color: var(--linie-zart);
+  box-shadow: var(--schatten-leiste);
+}
+
+/* Fragen: der Text faltet sich auf, statt zu erscheinen.
+   `::details-content` und `interpolate-size` koennen das inzwischen ohne
+   Umbau der Auszeichnung; wo sie fehlen, bleibt das Einblenden darunter als
+   Grundlage. Beides zusammen ergibt in jedem Browser etwas Anstaendiges. */
+.frage[open] > .frage-text {
+  animation: frage-auf 420ms var(--kurve-sheet);
+}
+@keyframes frage-auf {
+  from { opacity: 0; transform: translate3d(0, -8px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@supports (interpolate-size: allow-keywords) and (selector(::details-content)) {
+  .frage { interpolate-size: allow-keywords; }
+  .frage::details-content {
+    block-size: 0; overflow: hidden;
+    transition: block-size 420ms var(--kurve-sheet), content-visibility 420ms allow-discrete;
+  }
+  .frage[open]::details-content { block-size: auto; }
+  .frage[open] > .frage-text { animation: none; }
+}
+
+/* Ruhiger Modus: kein Ausgangszustand, keine Uebergaenge, keine Parallaxe.
+   Steht bewusst am Ende, damit es alles darueber ueberschreibt. */
+@media (prefers-reduced-motion: reduce) {
+  .js .held-inhalt > *,
+  .js .streifen,
+  .js .abschnitt-kopf > *,
+  .js .raster > *,
+  .js .schaufenster-text > *,
+  .js .schirm,
+  .js .preis-panel,
+  .js .band > :not(img),
+  .js .frage,
+  .js .fuss-raster > * {
+    opacity: 1; transform: none;
+  }
+  .js .held-bild > img { transform: none; will-change: auto; }
+  .frage[open] > .frage-text { animation: none; }
+}
+
+/* ---------------------------------------------------------------------------
    Druck
    --------------------------------------------------------------------------- */
 
 @media print {
+  /* Was noch nicht eingeblendet war, darf nicht als weisse Flaeche aus dem
+     Drucker kommen. */
+  .js * { opacity: 1 !important; transform: none !important; animation: none !important; }
   .kopf, .band, .zum-inhalt { display: none; }
   body { background: #fff; color: #000; }
   .rechtstext { max-width: none; }
