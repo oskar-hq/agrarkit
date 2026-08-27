@@ -38,18 +38,57 @@ Abschnittsrhythmus, Bildkarten, Preis, Fragen. Die Anwendung setzt Titel auf
 Dunkelmodus und `prefers-reduced-motion` sind aus demselben Designsystem
 übernommen.
 
+## Hosting: GitHub Pages
+
+Die Seite liegt auf GitHub Pages. Zwei Dinge sind deshalb Absicht und sollten
+so bleiben:
+
+- **Alle Pfade sind relativ** (`assets/…`, nicht `/assets/…`). Ein Projekt-Repo
+  wird unter `oskar-hq.github.io/<repo>/` ausgeliefert, nicht im Wurzelpfad —
+  mit absoluten Pfaden landet der Browser bei `oskar-hq.github.io/assets/…` und
+  bekommt kein CSS. Relative Pfade funktionieren unter beiden Adressen, auch
+  später unter `agrarkit.de`.
+- **`.nojekyll`** schaltet die Jekyll-Verarbeitung ab. Sie wird hier nicht
+  gebraucht und würde nur Bauzeit kosten.
+
+### Eigene Domain einrichten
+
+`canonical`, `og:url` und `sitemap.xml` zeigen bereits auf `agrarkit.de`. Damit
+das stimmt, fehlen zwei Schritte:
+
+1. **DNS** beim Anbieter der Domain setzen — vier A-Records für `agrarkit.de`
+   auf `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
+   `185.199.111.153` (dazu passend AAAA auf `2606:50c0:8000::153` bis
+   `…8003::153`). Für `www` ein CNAME auf `oskar-hq.github.io`. Der bestehende
+   Eintrag für `app.agrarkit.de` bleibt davon unberührt.
+2. **In GitHub** unter *Settings → Pages → Custom domain* `agrarkit.de`
+   eintragen und „Enforce HTTPS" anhaken. GitHub legt dabei selbst eine Datei
+   `CNAME` im Repo an.
+
+Die Reihenfolge ist wichtig: Wird die Domain in GitHub eingetragen, bevor DNS
+steht, leitet `oskar-hq.github.io` auf eine Adresse um, die noch nicht
+auflöst — die Seite ist dann vorübergehend über keine der beiden Adressen
+erreichbar. Deshalb liegt hier bewusst noch keine `CNAME`-Datei im Repo.
+
+Bis die Domain steht, zeigt das Vorschaubild für geteilte Links
+(`og:image`) auf `agrarkit.de` und wird noch nicht angezeigt. Das ist der
+einzige Punkt, der unter der `github.io`-Adresse nicht funktioniert.
+
 ## Was noch offen ist
 
-Vor dem Livegang zu klären — im Quelltext jeweils als `.offen`-Kasten oder
-als HTML-Kommentar markiert, damit nichts davon versehentlich online geht:
-
-- **Preis.** Der Abschnitt „Preis" nimmt an, dass Agrarkit in der Beta nichts
-  kostet. Das ist nicht abgestimmt. Siehe Kommentar über `<section id="preis">`
-  in `index.html` und die Frage „Was heißt Beta in der Praxis?".
-- **Impressum.** Telefonnummer (oder bewusster Verzicht), Umsatzsteuerangabe,
-  Bildnachweise der Stockfotos.
-- **Datenschutz.** Hoster, Serverstandort, Speicherdauer der Logfiles,
-  Auftragsverarbeitungsvertrag.
+- **Bildnachweise** der drei Landschaftsfotos im Impressum — Fotograf bzw.
+  Portal und Lizenzart. Der Kasten dort ist rot markiert, damit er auffällt.
+- **Data Privacy Framework.** Die Datenschutzerklärung stützt die Übermittlung
+  an GitHub in die USA auf die DPF-Zertifizierung von GitHub, Inc. Die muss
+  jährlich erneuert werden — einmal im Jahr auf
+  [dataprivacyframework.gov/list](https://www.dataprivacyframework.gov/list)
+  nachsehen.
+- **Umsatzsteuer.** Im Impressum fehlt der Abschnitt bewusst, solange Agrarkit
+  unentgeltlich ist. Sobald Geld fließt, gehört dort eine USt-IdNr. oder der
+  Satz zur Kleinunternehmerregelung hin (Kommentar steht an der Stelle).
+- **Preis.** In der Beta unentgeltlich, ein Preis für danach steht noch nicht
+  fest. Wenn er feststeht: `<section id="preis">` in `index.html` und die Frage
+  „Was heißt ‚Beta' in der Praxis?".
 
 ## Örtlich ansehen
 
