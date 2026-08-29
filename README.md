@@ -104,15 +104,6 @@ einzige Punkt, der unter der `github.io`-Adresse nicht funktioniert.
 
 ## Was noch offen ist
 
-- **Das Personenfoto in „Ein Ansprechpartner".** `landwirt.webp` zeigt einen
-  erkennbaren Menschen von Pixabay. Die Lizenz erlaubt die kommerzielle
-  Nutzung, nimmt aber ausdrücklich aus, dass Abbildungen erkennbarer Personen
-  so verwendet werden, dass eine Zustimmung oder Verbindung unterstellt wird —
-  und genau das legt die Karte nahe, weil daneben steht, die E-Mail lande
-  „direkt bei dem, der die Software baut". Wer das liest, hält den Abgebildeten
-  für Oskar Jacobsen. Zwei saubere Wege: ein eigenes Foto an die Stelle setzen
-  (für diese Karte ohnehin die bessere Lösung), oder auf ein Bild ohne
-  erkennbare Person wechseln.
 - **Data Privacy Framework.** Die Datenschutzerklärung stützt die Übermittlung
   an GitHub in die USA auf die DPF-Zertifizierung von GitHub, Inc. Die muss
   jährlich erneuert werden — einmal im Jahr auf
@@ -133,6 +124,40 @@ python3 -m http.server 8000
 
 Dann `http://localhost:8000` öffnen. Die Seiten verlinken absolut (`/assets/…`),
 ein Aufruf per `file://` funktioniert deshalb nicht.
+
+## Fotos
+
+Auf der Seite sind sechs Fotos. Vier davon von Pexels, zwei von Pixabay
+(Seitenkopf und unterer Aufrufbereich). Beide Lizenzen erlauben die
+kommerzielle Nutzung ohne Namensnennung; die Nennung im Impressum ist
+freiwillig.
+
+| Datei | Wo | Quelle |
+| --- | --- | --- |
+| `hero-pflug.webp` | Seitenkopf | Pixabay |
+| `feldarbeit-luft.webp` | Karte „Nicht für den Schreibtisch allein" | Pexels — Florence Mathiot |
+| `praxis-aehren.webp` | Karte „Aus der Praxis" | Pexels — Pawel Hordjewicz |
+| `sh-wind.webp` | Karte „Für Schleswig-Holstein" | Pexels — Wolfgang Weiser |
+| `hof.webp` | Karte „Ein Ansprechpartner" | Pexels — shsh |
+| `feld-wolken.webp` | Aufrufbereich unten | Pixabay |
+
+**Kein Foto zeigt eine erkennbare Person.** Das ist Absicht: die
+Stocklizenzen nehmen ausdrücklich aus, dass Abbildungen erkennbarer Personen
+so verwendet werden, dass eine Zustimmung oder Verbindung unterstellt wird.
+Ausgerechnet die Karte „Ein Ansprechpartner" hätte das getan — daneben steht,
+die E-Mail lande „direkt bei dem, der die Software baut". Dort steht jetzt ein
+Hof statt eines Menschen. Wenn ein eigenes Porträt dazukommt, ist das die
+bessere Lösung und rechtlich unproblematisch.
+
+Von den zehn hochgeladenen Pexels-Aufnahmen sind vier im Einsatz. Die übrigen
+sechs — Schwader mit Kühen, Strohballen, Maisfeld hochkant, Feld mit
+Baumreihe, zweites Maishäckseln, Luftbild Rapsfelder — liegen nicht mehr im
+Arbeitsverzeichnis, sind aber im Commit `ca33ade` erhalten und lassen sich
+jederzeit zurückholen:
+
+```
+git show ca33ade:assets/img/<dateiname>.jpg > <dateiname>.jpg
+```
 
 ## Bilder neu erzeugen
 
