@@ -78,6 +78,21 @@
   --kultur-hafer:  #8A6446;
   --kultur-mais:   #6E9578;
 
+  /* Beta — eine eigene Farbe, und zwar bewusst nicht Rot.
+     ---------------------------------------------------------------------
+     Rot ist in der Anwendung belegt: Storno, Loeschen, Ueberschreitung,
+     Arbeitskopie. „Beta" ist keine Warnung, sondern ein Zustand, und darf
+     nicht wie ein Fehler aussehen. Gruen geht auch nicht — das ist die
+     Primaeraktion.
+
+     Bleibt der Ockerton der Wintergerste. Der reine Wert #B98A2E traegt auf
+     dem Papiergrund allerdings nur 2,9:1 und ist als Text unbrauchbar;
+     derselbe Farbton vertieft kommt auf 6,0:1. Die Flaeche bleibt die
+     helle Gerste, die Schrift wird die dunkle. */
+  --beta:       #7A5A18;                  /* 6,0:1 auf --grund */
+  --beta-zart:  rgba(185,138,46,.18);
+  --beta-kante: rgba(185,138,46,.45);
+
   /* Masse */
   --tap: 44px;
   --r-s: 8px;
@@ -125,6 +140,9 @@
     --kultur-raps:   #E08C7E;
     --kultur-hafer:  #C39B77;
     --kultur-mais:   #6E9578;
+    --beta:       #D9AB5B;                /* 8,0:1 auf --grund im Dunkeln */
+    --beta-zart:  rgba(217,171,91,.16);
+    --beta-kante: rgba(217,171,91,.40);
     --schatten-leiste: 0 12px 26px -14px rgba(0,0,0,.70);
     --schatten-panel:  0 20px 40px -18px rgba(0,0,0,.75);
     --schatten-sheet:  0 50px 90px -30px rgba(0,0,0,.80);
@@ -239,6 +257,38 @@ p { margin: 0; text-wrap: pretty; }
   white-space: nowrap;
 }
 .marke-gruen { background: var(--gruen-zart); color: var(--gruen); }
+.marke-beta  { background: var(--beta-zart); color: var(--beta); }
+
+/* Beta-Marke in der Kopfleiste: klein, direkt am Wortzeichen, auf jeder
+   Seite. Sie steht als eigenes Wort neben „Agrarkit", nicht als Zusatz
+   im Wortzeichen selbst — das Wortzeichen bleibt das Wortzeichen. */
+.kopf-beta {
+  font-size: .66rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  padding: .25em .6em; border-radius: var(--r-pille);
+  background: var(--beta-zart); color: var(--beta);
+  align-self: center; white-space: nowrap;
+}
+
+/* Beta-Kasten im Held. Umrandet statt nur getoent, damit er als Kasten
+   gelesen wird und nicht als weitere Textzeile. */
+.beta-kasten {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 12px 18px;
+  border: 1px solid var(--beta-kante); border-radius: var(--r-m);
+  background: rgba(185,138,46,.14);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  font-size: .95rem;
+}
+.beta-kasten .wort {
+  font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: #F0D9A4;
+}
+.beta-kasten .satz { color: rgba(251,247,241,.92); }
+
+/* Auf hellem Grund — der Kasten steht auch im Preisabschnitt. */
+.beta-kasten.auf-hell { background: var(--beta-zart); }
+.beta-kasten.auf-hell .wort { color: var(--beta); }
+.beta-kasten.auf-hell .satz { color: var(--ink-leise); }
 
 /* ---------------------------------------------------------------------------
    Raster
@@ -412,27 +462,6 @@ details:not([open]) > .menue-blatt { display: none; }
 .held-inhalt .fliess-gross { color: rgba(251,247,241,.90); max-width: 54ch; }
 .held-fuss { font-size: .85rem; color: rgba(251,247,241,.72); }
 
-/* Streifen mit Zahlen unter dem Held. */
-.streifen {
-  display: grid; gap: 1px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  background: var(--linie-zart);
-  border: 1px solid var(--linie-zart);
-  border-radius: var(--r-m); overflow: hidden;
-  margin-top: 22px;
-}
-.streifen > div {
-  background: var(--grund);
-  padding: 22px 24px;
-  display: flex; flex-direction: column; gap: 4px;
-}
-.streifen dt { font-size: .82rem; color: var(--ink-still); order: 2; }
-.streifen dd {
-  margin: 0; order: 1;
-  font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ---------------------------------------------------------------------------
    Karten
    --------------------------------------------------------------------------- */
@@ -451,15 +480,30 @@ details:not([open]) > .menue-blatt { display: none; }
   padding: 28px;
 }
 
-.funktion { display: flex; flex-direction: column; gap: 12px; }
-.funktion-zeichen {
-  width: 42px; height: 42px; flex: none;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: var(--r-s);
-  background: var(--gruen-zart); color: var(--gruen);
-  margin-bottom: 4px;
+/* Funktionen: Haarlinie statt Kasten.
+   ---------------------------------------------------------------------------
+   Vorher lag jede Funktion in einem Glaspanel mit Schatten. Sechs davon
+   nebeneinander ergaben sechs gleich laute Flaechen, und weil eine davon ein
+   Bild trug, stach genau die eine heraus, ohne dass sie wichtiger waere.
+
+   Das Designsystem sagt selbst, Karten gehoeren nur dahin, „wo etwas
+   schwebt" — auf Stammdaten und Import treten an ihre Stelle Listen mit
+   Haarlinien. Genau das ist hier richtig: eine Aufzaehlung schwebt nicht. */
+.raster-funktionen { gap: 38px 44px; }
+
+.funktion {
+  display: flex; flex-direction: column; gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--linie);
 }
-.funktion-zeichen svg { width: 21px; height: 21px; }
+.funktion-zeichen {
+  width: 26px; height: 26px; flex: none;
+  display: flex; align-items: center; justify-content: flex-start;
+  color: var(--ink-nichttext);
+  margin-bottom: 2px;
+}
+.funktion-zeichen svg { width: 22px; height: 22px; }
+.funktion h3 { margin-top: 0; }
 .funktion p { color: var(--ink-leise); font-size: .95rem; }
 
 /* Bildkarte: Foto mit Verlauf, Titel unten — wie im Gestaltungsvorbild. */
@@ -736,19 +780,23 @@ figure.schirm-mit-text { margin: 0; }
 @media (max-width: 900px) {
   .kopf-nav, .kopf-rechts .nur-breit { display: none; }
   .kopf-menue { display: block; }
+  .kopf-innen { gap: 14px; }
+}
+
+/* Unter 760 px schob die Beta-Marke den Menuekopf ueber den rechten Rand:
+   Wortzeichen, Marke, Knopf und Menue passen dort nicht mehr nebeneinander.
+   Die Marke geht als Erstes, weil der Beta-Kasten im Held direkt darunter
+   dasselbe sagt — und zwar deutlicher. */
+@media (max-width: 760px) {
+  .kopf-beta { display: none; }
 }
 
 @media (max-width: 700px) {
   :root { --rand: 20px; }
   .raster-3, .raster-2 { grid-template-columns: minmax(0, 1fr); }
-  .streifen { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .held-bild { min-height: clamp(420px, 74vh, 560px); }
   .knopf-reihe > .knopf { flex: 1 1 100%; }
   .fuss-unten .trenner { margin-left: 0; flex-basis: 100%; }
-}
-
-@media (max-width: 460px) {
-  .streifen { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---------------------------------------------------------------------------
@@ -775,11 +823,10 @@ figure.schirm-mit-text { margin: 0; }
   /* Diese Liste liest bewegung.js zur Laufzeit aus — sie steht deshalb hier
      und nicht im Skript. Die Regel darunter muss dieselbe Liste tragen;
      beide zusammen aendern. */
-  --blende-ziele: .held-inhalt > *, .streifen, .abschnitt-kopf > *, .raster > *, .schaufenster-text > *, .schirm, .preis-panel, .band > :not(img), .frage, .fuss-raster > *;
+  --blende-ziele: .held-inhalt > *, .abschnitt-kopf > *, .raster > *, .schaufenster-text > *, .schirm, .preis-panel, .band > :not(img), .frage, .fuss-raster > *;
 }
 
 .js .held-inhalt > *,
-.js .streifen,
 .js .abschnitt-kopf > *,
 .js .raster > *,
 .js .schaufenster-text > *,
@@ -850,8 +897,7 @@ figure.schirm-mit-text { margin: 0; }
    Steht bewusst am Ende, damit es alles darueber ueberschreibt. */
 @media (prefers-reduced-motion: reduce) {
   .js .held-inhalt > *,
-  .js .streifen,
-  .js .abschnitt-kopf > *,
+    .js .abschnitt-kopf > *,
   .js .raster > *,
   .js .schaufenster-text > *,
   .js .schirm,

@@ -102,6 +102,28 @@ Bis die Domain steht, zeigt das Vorschaubild für geteilte Links
 (`og:image`) auf `agrarkit.de` und wird noch nicht angezeigt. Das ist der
 einzige Punkt, der unter der `github.io`-Adresse nicht funktioniert.
 
+## Beta ohne Versionsnummer
+
+Auf der Website steht **nur Beta, nie eine Nummer**. Das ist Absicht: eine 1.2
+wäre immer noch eine Beta, und die Website deshalb anzufassen wäre Arbeit ohne
+Ertrag. Die Versionsnummer steht in der Anwendung, wo sie hingehört.
+
+Beta ist an vier Stellen sichtbar, alle in derselben Farbe:
+
+- als Marke neben dem Wortzeichen in der Kopfleiste (unter 760 px ausgeblendet,
+  sonst schiebt sie den Menüknopf über den rechten Rand);
+- als Kasten im Held, direkt unter den Knöpfen;
+- als Kasten im Preisabschnitt;
+- als Marke in der Fußzeile jeder Seite.
+
+Die Farbe ist der Ockerton der Wintergerste aus der Kartenlegende —
+**bewusst nicht Rot**: Rot ist in der Anwendung für Storno, Löschen und
+Überschreitung belegt, und Beta ist keine Warnung, sondern ein Zustand. Grün
+ginge auch nicht, das ist die Primäraktion. Der reine Gerstenton trägt auf dem
+Papiergrund nur 2,9:1 und ist als Text unbrauchbar; `--beta` ist deshalb
+derselbe Farbton vertieft und kommt auf 6,0:1 (5,0:1 auf der getönten Fläche
+der Marke).
+
 ## Was noch offen ist
 
 - **Data Privacy Framework.** Die Datenschutzerklärung stützt die Übermittlung
@@ -122,12 +144,12 @@ einzige Punkt, der unter der `github.io`-Adresse nicht funktioniert.
 python3 -m http.server 8000
 ```
 
-Dann `http://localhost:8000` öffnen. Die Seiten verlinken absolut (`/assets/…`),
-ein Aufruf per `file://` funktioniert deshalb nicht.
+Dann `http://localhost:8000` öffnen. Seit die Pfade relativ sind, lässt sich
+`index.html` zur Not auch direkt per `file://` öffnen.
 
 ## Fotos
 
-Auf der Seite sind sechs Fotos. Vier davon von Pexels, zwei von Pixabay
+Auf der Seite sind fünf Fotos. Drei davon von Pexels, zwei von Pixabay
 (Seitenkopf und unterer Aufrufbereich). Beide Lizenzen erlauben die
 kommerzielle Nutzung ohne Namensnennung; die Nennung im Impressum ist
 freiwillig.
@@ -135,7 +157,6 @@ freiwillig.
 | Datei | Wo | Quelle |
 | --- | --- | --- |
 | `hero-pflug.webp` | Seitenkopf | Pixabay |
-| `feldarbeit-luft.webp` | Karte „Nicht für den Schreibtisch allein" | Pexels — Florence Mathiot |
 | `praxis-aehren.webp` | Karte „Aus der Praxis" | Pexels — Pawel Hordjewicz |
 | `sh-wind.webp` | Karte „Für Schleswig-Holstein" | Pexels — Wolfgang Weiser |
 | `hof.webp` | Karte „Ein Ansprechpartner" | Pexels — shsh |
@@ -149,7 +170,7 @@ die E-Mail lande „direkt bei dem, der die Software baut". Dort steht jetzt ein
 Hof statt eines Menschen. Wenn ein eigenes Porträt dazukommt, ist das die
 bessere Lösung und rechtlich unproblematisch.
 
-Von den zehn hochgeladenen Pexels-Aufnahmen sind vier im Einsatz. Die übrigen
+Von den zehn hochgeladenen Pexels-Aufnahmen sind drei im Einsatz. Die übrigen
 sechs — Schwader mit Kühen, Strohballen, Maisfeld hochkant, Feld mit
 Baumreihe, zweites Maishäckseln, Luftbild Rapsfelder — liegen nicht mehr im
 Arbeitsverzeichnis, sind aber im Commit `ca33ade` erhalten und lassen sich

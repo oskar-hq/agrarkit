@@ -38,7 +38,6 @@
   "operatingSystem": "Web",
   "url": "https://agrarkit.de/",
   "inLanguage": "de",
-  "softwareVersion": "1.1 Beta",
   "description": "Ackerschlagkartei für den norddeutschen Betrieb: Schläge mit Knicks und Hindernissen, Düngebedarf mit Saldo, ENDO-SH-Import und -Export.",
   "author": { "@type": "Person", "name": "Oskar Jacobsen" }
 }
@@ -59,6 +58,7 @@
       </svg>
       Agrarkit
     </a>
+    <span class="kopf-beta">Beta</span>
 
     <nav class="kopf-nav" aria-label="Hauptnavigation">
       <a href="#funktionen">Funktionen</a>
@@ -111,36 +111,20 @@
           <span class="augenbraue">Agrarsoftware aus Schleswig-Holstein</span>
           <h1 class="titel-held">Schläge, Düngung und ENDO&#8209;SH in einem Programm.</h1>
           <p class="fliess-gross">
-            Agrarkit ist eine Ackerschlagkartei für den norddeutschen Betrieb.
-            Umrisse mit Knicks und Hindernissen, Düngebedarf mit Saldo, ENDO&#8209;SH
-            rein und wieder raus — ohne dass daraus ein Winterprojekt wird.
+            Die Ackerschlagkartei für den norddeutschen Betrieb. Umrisse mit
+            Knicks, Düngebedarf mit Saldo, ENDO&#8209;SH rein und wieder raus.
           </p>
           <div class="knopf-reihe auf-dunkel">
             <a class="knopf knopf-primaer knopf-gross" href="https://app.agrarkit.de/registrieren">Betrieb anlegen</a>
             <a class="knopf knopf-gross" href="#funktionen">Ansehen, was drin ist</a>
           </div>
-          <p class="held-fuss">Version 1.1 · Beta · Läuft im Browser, ohne Installation</p>
+          <p class="beta-kasten">
+            <span class="wort">Beta</span>
+            <span class="satz">Agrarkit wird gerade gebaut — und ist so lange kostenlos.</span>
+          </p>
         </div>
       </div>
 
-      <dl class="streifen">
-        <div>
-          <dt>Bestandsdaten rein, Meldung raus</dt>
-          <dd>ENDO&#8209;SH</dd>
-        </div>
-        <div>
-          <dt>Umrisse mit Knick und Sicherheitsabstand</dt>
-          <dd>Nutzfläche</dd>
-        </div>
-        <div>
-          <dt>Summen und Saldo je Schlag</dt>
-          <dd>N · P₂O₅ · K₂O</dd>
-        </div>
-        <div>
-          <dt>Bedienbar mit Arbeitshandschuhen</dt>
-          <dd>44 px</dd>
-        </div>
-      </dl>
     </div>
   </section>
 
@@ -153,95 +137,87 @@
         <span class="augenbraue">Was Agrarkit macht</span>
         <h2 class="titel-gross">Der Papierkram, den die Fläche nun einmal mitbringt.</h2>
         <p class="fliess-gross">
-          Kein Baukasten mit Modulen, die man einzeln dazubucht. Fünf Bereiche,
-          die zusammengehören, weil sie im Betrieb auch zusammengehören.
+          Kein Baukasten mit Modulen, die man einzeln dazubucht. Was im Betrieb
+          zusammengehört, gehört auch in der Software zusammen.
         </p>
       </div>
 
-      <div class="raster raster-3">
-        <article class="panel funktion">
+      <div class="raster raster-3 raster-funktionen">
+        <article class="funktion">
           <span class="funktion-zeichen" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/>
             </svg>
           </span>
           <h3 class="titel-klein">Schläge und Karte</h3>
           <p>
             Jeder Schlag mit Nummer, Größe, FLIK, Bodenart und Ackerzahl.
-            Auf der Karte nach Kultur eingefärbt, wahlweise über dem Luftbild —
-            und mit den Hektar, die wirklich zusammenkommen.
+            Auf der Karte nach Kultur eingefärbt, wahlweise über dem Luftbild.
           </p>
         </article>
 
-        <article class="panel funktion">
+        <article class="funktion">
           <span class="funktion-zeichen" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 6h16M4 12h16M4 18h9"/>
             </svg>
           </span>
           <h3 class="titel-klein">Buch und Buchungen</h3>
           <p>
             Düngung, Ernte, Maßnahmen — je Schlag oder als Sammelbuchung für
-            mehrere auf einmal. Mit Menge je Hektar und in Summe, damit beim
-            Nachrechnen nichts auseinanderläuft.
+            mehrere auf einmal. Mit Menge je Hektar und in Summe.
           </p>
         </article>
 
-        <article class="panel funktion">
+        <article class="funktion">
           <span class="funktion-zeichen" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/>
             </svg>
           </span>
           <h3 class="titel-klein">Düngebedarf und Saldo</h3>
           <p>
             Bedarf, mineralisch, organisch, Summe, Saldo — untereinander in
-            einer Tabelle. Bei Wirtschaftsdünger steht daneben, welcher Anteil
-            angerechnet wird und welcher nicht.
+            einer Tabelle, mit dem anrechenbaren Anteil daneben.
           </p>
         </article>
 
-        <article class="panel funktion">
+        <article class="funktion">
           <span class="funktion-zeichen" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
             </svg>
           </span>
           <h3 class="titel-klein">ENDO&#8209;SH, hin und zurück</h3>
           <p>
-            Bestandsdaten aus ENDO&#8209;SH einlesen, statt alles abzutippen.
-            Und am Ende des Jahres eine Datei, die geprüft ist, bevor sie
-            das Haus verlässt.
+            Bestandsdaten einlesen statt abtippen. Und am Ende des Jahres eine
+            Datei, die geprüft ist, bevor sie das Haus verlässt.
           </p>
         </article>
 
-        <a class="bildkarte" href="#endo-sh">
-          <img src="assets/img/feldarbeit-luft.webp"
-               srcset="assets/img/feldarbeit-luft-600.webp 600w, assets/img/feldarbeit-luft.webp 900w"
-               sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 33vw"
-               width="900" height="675" loading="lazy"
-               alt="Luftbild: ein Schlepper pflügt die Grasnarbe um, scharfe Kante zwischen Grün und frischer Erde">
-          <span class="bildkarte-inhalt">
-            <span class="augenbraue">Gemacht fürs Land</span>
-            <span class="titel-klein">Nicht für den Schreibtisch allein</span>
-            <p>
-              Große Tippziele, hoher Kontrast, keine Menüs in Menüs — weil die
-              Buchung oft am Feldrand entsteht und nicht abends im Büro.
-            </p>
-          </span>
-        </a>
-
-        <article class="panel funktion">
+        <article class="funktion">
           <span class="funktion-zeichen" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 10h18M9 4v16"/>
             </svg>
           </span>
           <h3 class="titel-klein">Rohbuch und Arbeitskopie</h3>
           <p>
-            Zwei Ebenen im selben Betrieb: das Rohbuch als das, was gebucht ist —
-            und die Arbeitskopie zum Durchspielen. Die Arbeitskopie ist am
-            wärmeren Grund immer zu erkennen.
+            Das Rohbuch als das, was gebucht ist — und die Arbeitskopie zum
+            Durchspielen, am wärmeren Grund immer zu erkennen.
+          </p>
+        </article>
+
+        <article class="funktion">
+          <span class="funktion-zeichen" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/>
+            </svg>
+          </span>
+          <h3 class="titel-klein">Für draußen gebaut</h3>
+          <p>
+            Große Tippziele, hoher Kontrast, keine Menüs in Menüs — weil die
+            Buchung oft am Feldrand entsteht und nicht abends im Büro.
           </p>
         </article>
       </div>
@@ -456,9 +432,9 @@
           <span class="augenbraue">Preis</span>
           <h2 class="titel-gross">Solange Agrarkit in der Beta ist, kostet es nichts.</h2>
           <p class="fliess">
-            Agrarkit ist Version 1.1 und noch nicht fertig. Wer jetzt einsteigt,
-            arbeitet mit einer Software, an der noch gebaut wird — und redet
-            mit, was als Nächstes gebaut wird.
+            Agrarkit ist noch nicht fertig. Wer jetzt einsteigt, arbeitet mit
+            einer Software, an der noch gebaut wird — und redet mit, was als
+            Nächstes gebaut wird.
           </p>
           <p class="fliess">
             Was es später kostet, steht hier, sobald es feststeht. Niemand wird
@@ -468,7 +444,10 @@
         </div>
 
         <div class="preis-panel">
-          <span class="augenbraue">Beta-Zugang</span>
+          <p class="beta-kasten auf-hell">
+            <span class="wort">Beta</span>
+            <span class="satz">Noch im Bau. Preis für danach steht nicht fest.</span>
+          </p>
           <p class="preis-zahl"><strong>0 €</strong> <span>im Monat, für den ganzen Betrieb</span></p>
           <ul class="haken">
             <li>Alle Funktionen, keine Module</li>
@@ -647,7 +626,7 @@
 
     <div class="fuss-unten">
       <span>© <span class="zahl">2026</span> Oskar Jacobsen</span>
-      <span class="trenner">Agrarkit 1.1 · Beta</span>
+      <span class="trenner">Agrarkit · <span class="marke marke-beta">Beta</span></span>
     </div>
   </div>
 </footer>
