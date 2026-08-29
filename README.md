@@ -38,6 +38,27 @@ Abschnittsrhythmus, Bildkarten, Preis, Fragen. Die Anwendung setzt Titel auf
 Dunkelmodus und `prefers-reduced-motion` sind aus demselben Designsystem
 übernommen.
 
+### Der Held
+
+Randlos über die volle Fensterbreite und -höhe. Drei Dinge hängen daran und
+sollten zusammen bleiben:
+
+- Die Kopfleiste klebt, steht dabei aber im normalen Fluss und nimmt Platz
+  weg. Ohne `.hat-held .held { margin-top: calc(-1 * var(--kopf)) }` läge der
+  Held *unter* ihr statt hinter ihr, und über dem Bild bliebe ein
+  cremefarbener Streifen.
+- `100svh`, nicht `100vh`: auf dem Handy meint `vh` die Höhe ohne die ein- und
+  ausfahrende Browserleiste, der Held wäre beim Laden angeschnitten.
+- Die Klasse `hat-held` steht **nur** auf der Startseite. Sie macht die
+  Kopfleiste durchsichtig und ihre Schrift hell, solange nicht gerollt wird;
+  auf den Rechtsseiten gibt es kein Bild, dort wäre helle Schrift unlesbar.
+
+Der Schleier über dem Foto besteht aus drei Verläufen: einer oben für die
+Kopfleiste, einer von links für den Text, einer von unten. Auf schmalen
+Fenstern greift ein eigener, weitgehend gleichmäßiger Schleier — dort
+schneidet `object-fit: cover` die helle Bildmitte an, und der Text läuft über
+die volle Breite, der waagerechte Verlauf hilft also nicht mehr.
+
 ## Bewegung
 
 `assets/js/bewegung.js`, rund 130 Zeilen, keine Abhängigkeiten. Drei Effekte:
@@ -108,13 +129,19 @@ Auf der Website steht **nur Beta, nie eine Nummer**. Das ist Absicht: eine 1.2
 wäre immer noch eine Beta, und die Website deshalb anzufassen wäre Arbeit ohne
 Ertrag. Die Versionsnummer steht in der Anwendung, wo sie hingehört.
 
-Beta ist an vier Stellen sichtbar, alle in derselben Farbe:
+Beta steht an zwei Stellen, mehr braucht es nicht:
 
-- als Marke neben dem Wortzeichen in der Kopfleiste (unter 760 px ausgeblendet,
-  sonst schiebt sie den Menüknopf über den rechten Rand);
-- als Kasten im Held, direkt unter den Knöpfen;
-- als Kasten im Preisabschnitt;
+- als **Balken ganz oben**, über der Kopfleiste, auf jeder Seite. Er ist
+  ausdrücklich **nicht** `sticky`: wer die Seite öffnet, sieht ihn zuerst; wer
+  danach liest, braucht ihn nicht dauerhaft vor der Nase. Die klebende
+  Kopfleiste rückt nach, sobald er oben raus ist.
 - als Marke in der Fußzeile jeder Seite.
+
+Der Balken ist auf **45 px Höhe festgelegt** (`--balken`), weil der Held seine
+Höhe aus `calc(100svh - var(--balken))` nimmt. Damit die Rechnung auf schmalen
+Fenstern stimmt, trägt er dort einen kürzeren Satz — mit dem langen brach er
+auf 390 px auf drei Zeilen um, wurde 89 px hoch, und der Held ragte um genau
+diese Differenz aus dem Fenster.
 
 Die Farbe ist der Ockerton der Wintergerste aus der Kartenlegende —
 **bewusst nicht Rot**: Rot ist in der Anwendung für Storno, Löschen und

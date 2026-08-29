@@ -89,9 +89,11 @@
      dem Papiergrund allerdings nur 2,9:1 und ist als Text unbrauchbar;
      derselbe Farbton vertieft kommt auf 6,0:1. Die Flaeche bleibt die
      helle Gerste, die Schrift wird die dunkle. */
-  --beta:       #7A5A18;                  /* 6,0:1 auf --grund */
-  --beta-zart:  rgba(185,138,46,.18);
-  --beta-kante: rgba(185,138,46,.45);
+  --beta:         #7A5A18;                /* 6,0:1 auf --grund */
+  --beta-satz:    #5F4712;                /* Fliesstext im Balken */
+  --beta-zart:    rgba(185,138,46,.18);
+  --beta-flaeche: #F6E9CC;                /* Balkenflaeche, deckend */
+  --beta-kante:   rgba(185,138,46,.55);
 
   /* Masse */
   --tap: 44px;
@@ -111,6 +113,8 @@
   --kurve-weich: cubic-bezier(.4,0,.2,1);
 
   /* Nur fuer die Website */
+  --kopf:     64px;     /* Hoehe der Kopfleiste */
+  --balken:   45px;     /* Hoehe des Beta-Balkens */
   --huelle:   1200px;   /* Inhaltsbreite */
   --rand:     24px;     /* Seitenrand */
   --luft:     clamp(72px, 9vw, 128px);   /* Abstand zwischen Abschnitten */
@@ -140,9 +144,11 @@
     --kultur-raps:   #E08C7E;
     --kultur-hafer:  #C39B77;
     --kultur-mais:   #6E9578;
-    --beta:       #D9AB5B;                /* 8,0:1 auf --grund im Dunkeln */
-    --beta-zart:  rgba(217,171,91,.16);
-    --beta-kante: rgba(217,171,91,.40);
+    --beta:         #E8C382;
+    --beta-satz:    #D5C09B;
+    --beta-zart:    rgba(217,171,91,.16);
+    --beta-flaeche: #2E2617;
+    --beta-kante:   rgba(217,171,91,.34);
     --schatten-leiste: 0 12px 26px -14px rgba(0,0,0,.70);
     --schatten-panel:  0 20px 40px -18px rgba(0,0,0,.75);
     --schatten-sheet:  0 50px 90px -30px rgba(0,0,0,.80);
@@ -259,36 +265,43 @@ p { margin: 0; text-wrap: pretty; }
 .marke-gruen { background: var(--gruen-zart); color: var(--gruen); }
 .marke-beta  { background: var(--beta-zart); color: var(--beta); }
 
-/* Beta-Marke in der Kopfleiste: klein, direkt am Wortzeichen, auf jeder
-   Seite. Sie steht als eigenes Wort neben „Agrarkit", nicht als Zusatz
-   im Wortzeichen selbst — das Wortzeichen bleibt das Wortzeichen. */
-.kopf-beta {
-  font-size: .66rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
-  padding: .25em .6em; border-radius: var(--r-pille);
-  background: var(--beta-zart); color: var(--beta);
-  align-self: center; white-space: nowrap;
-}
+/* Beta-Balken: sitzt ganz oben, ueber der Kopfleiste, und rollt mit der
+   Seite weg. Ausdruecklich kein `sticky` — wer die Seite oeffnet, sieht ihn
+   zuerst; wer danach liest, braucht ihn nicht dauerhaft vor der Nase. Die
+   klebende Kopfleiste rueckt nach, sobald er oben raus ist.
 
-/* Beta-Kasten im Held. Umrandet statt nur getoent, damit er als Kasten
-   gelesen wird und nicht als weitere Textzeile. */
-.beta-kasten {
-  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
-  padding: 12px 18px;
-  border: 1px solid var(--beta-kante); border-radius: var(--r-m);
-  background: rgba(185,138,46,.14);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  font-size: .95rem;
+   Deckende Flaeche statt getoenter: der Balken liegt ueber dem randlosen
+   Held, und eine durchscheinende Flaeche hiesse, dass die Schrift je nach
+   Bildausschnitt auf etwas anderem steht. */
+.beta-balken {
+  margin: 0;
+  background: var(--beta-flaeche);
+  border-bottom: 1px solid var(--beta-kante);
+  color: var(--beta);
+  font-size: .875rem;
 }
-.beta-kasten .wort {
-  font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  color: #F0D9A4;
+.beta-balken-innen {
+  min-height: calc(var(--balken) - 1px);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding-block: 9px;
 }
-.beta-kasten .satz { color: rgba(251,247,241,.92); }
+.beta-balken .wort {
+  font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  flex: none;
+}
+.beta-balken .satz { color: var(--beta-satz); }
 
-/* Auf hellem Grund — der Kasten steht auch im Preisabschnitt. */
-.beta-kasten.auf-hell { background: var(--beta-zart); }
-.beta-kasten.auf-hell .wort { color: var(--beta); }
-.beta-kasten.auf-hell .satz { color: var(--ink-leise); }
+/* Auf schmalen Fenstern ein kuerzerer Satz. Nicht Kosmetik: mit dem langen
+   Satz brach der Balken auf 390 px auf drei Zeilen um, wurde 89 statt 45 px
+   hoch — und weil der Held seine Hoehe aus `calc(100svh - var(--balken))`
+   nimmt, ragte er genau um diese Differenz aus dem Fenster. Eine Zeile
+   haelt die Rechnung stabil. */
+.nur-schmal { display: none; }
+@media (max-width: 760px) {
+  .beta-balken { font-size: .8125rem; }
+  .beta-balken .nur-breit { display: none; }
+  .beta-balken .nur-schmal { display: inline; }
+}
 
 /* ---------------------------------------------------------------------------
    Raster
@@ -367,7 +380,7 @@ p { margin: 0; text-wrap: pretty; }
 }
 .kopf-innen {
   display: flex; align-items: center; gap: 26px;
-  min-height: 64px;
+  min-height: var(--kopf);
 }
 
 .marke-wort {
@@ -426,14 +439,32 @@ details:not([open]) > .menue-blatt { display: none; }
    Held
    --------------------------------------------------------------------------- */
 
-.held { padding-top: clamp(28px, 4vw, 52px); padding-bottom: var(--luft); }
+/* Held: randlos ueber das ganze Fenster.
+   ---------------------------------------------------------------------------
+   Vorher eine gerundete Karte innerhalb der Huelle. Jetzt Bild von Kante zu
+   Kante und ueber die volle Fensterhoehe — die Kopfleiste liegt durchsichtig
+   darueber statt darueber zu stehen.
+
+   `100svh` und nicht `100vh`: auf dem Handy meint `vh` die Hoehe OHNE die
+   ein- und ausfahrende Browserleiste, der Held waere dort beim Laden
+   angeschnitten. `svh` nimmt die kleine Variante und passt in beiden
+   Zustaenden. Abgezogen sind die 44 px des Beta-Balkens, damit Balken plus
+   Held zusammen genau eine Fensterhoehe ergeben. */
+.held { padding: 0; }
+
+/* Die Kopfleiste klebt, steht dabei aber im normalen Fluss und nimmt also
+   Platz weg — ohne diesen Zug lag der Held UNTER ihr statt hinter ihr, und
+   oben blieb ein cremefarbener Streifen ueber dem Bild. */
+.hat-held .held { margin-top: calc(-1 * var(--kopf)); }
 
 .held-bild {
   position: relative; isolation: isolate;
-  border-radius: var(--r-l); overflow: hidden;
-  min-height: clamp(460px, 62vh, 660px);
-  display: flex; align-items: flex-end;
-  box-shadow: var(--schatten-panel);
+  min-height: calc(100vh - var(--balken));
+  min-height: calc(100svh - var(--balken));
+  display: flex; align-items: center;
+  /* Die Kopfleiste liegt jetzt darueber; ohne diesen Abstand stiesse der
+     Text bei kurzen Fenstern dagegen. */
+  padding-top: var(--kopf);
 }
 .held-bild > img {
   position: absolute; inset: 0; z-index: -2;
@@ -450,12 +481,36 @@ details:not([open]) > .menue-blatt { display: none; }
 .held-bild::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
-    linear-gradient(to top, rgba(14,22,17,.86) 0%, rgba(14,22,17,.62) 34%, rgba(14,22,17,.30) 62%, rgba(14,22,17,.18) 100%),
-    linear-gradient(to right, rgba(14,22,17,.80) 0%, rgba(14,22,17,.62) 42%, rgba(14,22,17,.20) 68%, rgba(14,22,17,0) 88%);
+    /* Oben ein eigener Schleier fuer die Kopfleiste. Ohne ihn stand
+       „Anmelden" auf hellem Wolkenhimmel und kam auf 4,2:1. */
+    linear-gradient(to bottom, rgba(14,22,17,.52) 0%, rgba(14,22,17,.16) 16%, rgba(14,22,17,0) 28%),
+    /* Der Text steht links; rechts bleibt der Schlepper hell. */
+    linear-gradient(to right, rgba(14,22,17,.72) 0%, rgba(14,22,17,.52) 46%, rgba(14,22,17,.12) 80%),
+    linear-gradient(to top, rgba(14,22,17,.68) 0%, rgba(14,22,17,.34) 55%, rgba(14,22,17,.24) 100%);
 }
+
+/* Schmale Fenster brauchen einen anderen Schleier, nicht nur einen
+   staerkeren.
+   ---------------------------------------------------------------------------
+   Mit `100svh` ist der Held auf dem Handy hoch und schmal, `object-fit:
+   cover` schneidet deshalb die Bildmitte an — und die ist heller Himmel.
+   Gleichzeitig laeuft der Text ueber die volle Breite, der waagerechte
+   Verlauf hilft dort also nicht mehr. Gemessen lag die Ueberschrift bei
+   2,6:1 und der Fliesstext bei 2,8:1.
+
+   Deshalb hier ein weitgehend gleichmaessiger Schleier statt eines
+   gerichteten. */
+@media (max-width: 900px) {
+  .held-bild::after {
+    background:
+      linear-gradient(to bottom, rgba(14,22,17,.58) 0%, rgba(14,22,17,.24) 14%, rgba(14,22,17,0) 26%),
+      linear-gradient(to top, rgba(14,22,17,.80) 0%, rgba(14,22,17,.70) 55%, rgba(14,22,17,.66) 100%);
+  }
+}
+/* Der Text bleibt in der Huelle, das Bild nicht. */
+.held-huelle { width: 100%; }
 .held-inhalt {
-  padding: clamp(28px, 4.5vw, 60px);
-  display: flex; flex-direction: column; gap: 22px; align-items: flex-start;
+  display: flex; flex-direction: column; gap: 24px; align-items: flex-start;
   max-width: 780px; color: #FBF7F1;
 }
 .held-inhalt .augenbraue { color: rgba(251,247,241,.82); }
@@ -783,18 +838,10 @@ figure.schirm-mit-text { margin: 0; }
   .kopf-innen { gap: 14px; }
 }
 
-/* Unter 760 px schob die Beta-Marke den Menuekopf ueber den rechten Rand:
-   Wortzeichen, Marke, Knopf und Menue passen dort nicht mehr nebeneinander.
-   Die Marke geht als Erstes, weil der Beta-Kasten im Held direkt darunter
-   dasselbe sagt — und zwar deutlicher. */
-@media (max-width: 760px) {
-  .kopf-beta { display: none; }
-}
 
 @media (max-width: 700px) {
   :root { --rand: 20px; }
   .raster-3, .raster-2 { grid-template-columns: minmax(0, 1fr); }
-  .held-bild { min-height: clamp(420px, 74vh, 560px); }
   .knopf-reihe > .knopf { flex: 1 1 100%; }
   .fuss-unten .trenner { margin-left: 0; flex-basis: 100%; }
 }
@@ -871,6 +918,39 @@ figure.schirm-mit-text { margin: 0; }
   border-bottom-color: var(--linie-zart);
   box-shadow: var(--schatten-leiste);
 }
+
+/* Kopfleiste ueber dem randlosen Held.
+   ---------------------------------------------------------------------------
+   Solange der Held im Bild ist, liegt die Leiste durchsichtig auf dem Foto
+   und traegt helle Schrift; sobald gerollt wird, wird sie wieder zur Leiste
+   auf Papier. Die Klasse `hat-held` steht nur auf der Startseite — auf den
+   Rechtsseiten gibt es kein Bild, dort waere helle Schrift unlesbar.
+
+   Das Wortzeichen dreht sich dabei um: heller Block, dunkle Furchen. Die
+   Werte stehen im SVG selbst, deshalb hier ueberschrieben. */
+.hat-held .kopf:not(.ist-gerollt) {
+  background: transparent;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+.hat-held .kopf:not(.ist-gerollt) .marke-wort { color: #FBF7F1; }
+.hat-held .kopf:not(.ist-gerollt) .marke-wort svg rect { fill: #FBF7F1; }
+.hat-held .kopf:not(.ist-gerollt) .marke-wort svg g { stroke: #26392F; }
+.hat-held .kopf:not(.ist-gerollt) .kopf-nav a { color: rgba(251,247,241,.86); }
+.hat-held .kopf:not(.ist-gerollt) .kopf-nav a:hover { color: #FBF7F1; }
+.hat-held .kopf:not(.ist-gerollt) .knopf-still { color: #FBF7F1; }
+.hat-held .kopf:not(.ist-gerollt) .knopf-still:hover { background: rgba(255,255,255,.14); color: #fff; }
+.hat-held .kopf:not(.ist-gerollt) .knopf-primaer {
+  background: #FBF7F1; border-color: #FBF7F1; color: #26392F;
+}
+.hat-held .kopf:not(.ist-gerollt) .knopf-primaer:hover { background: #fff; border-color: #fff; }
+.hat-held .kopf:not(.ist-gerollt) .kopf-menue > summary {
+  background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.42); color: #FBF7F1;
+}
+.hat-held .kopf:not(.ist-gerollt) :where(a, button, summary):focus-visible { outline-color: #FBF7F1; }
+.marke-wort, .kopf-nav a, .knopf { transition: color 240ms var(--kurve-weich); }
+.marke-wort svg rect, .marke-wort svg g { transition: fill 240ms var(--kurve-weich), stroke 240ms var(--kurve-weich); }
 
 /* Fragen: der Text faltet sich auf, statt zu erscheinen.
    `::details-content` und `interpolate-size` koennen das inzwischen ohne
