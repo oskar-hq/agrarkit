@@ -47,6 +47,12 @@ sollten zusammen bleiben:
   weg. Ohne `.hat-held .held { margin-top: calc(-1 * var(--kopf)) }` läge der
   Held *unter* ihr statt hinter ihr, und über dem Bild bliebe ein
   cremefarbener Streifen.
+- **`--kopf` rechnet den Sicherheitsrand des Geräts mit**
+  (`calc(var(--kopf-basis) + env(safe-area-inset-top, 0px))`). Vorher standen
+  dort nur 64 px, während die Kopfleiste auf einem iPhone mit Aussparung
+  112 px hoch war — die Differenz blieb als cremefarbener Spalt stehen und
+  machte die klebende Leiste obendrein zu hoch. Kopfhöhe und Hochzug des Helds
+  müssen aus **derselben** Zahl kommen.
 - `100svh`, nicht `100vh`: auf dem Handy meint `vh` die Höhe ohne die ein- und
   ausfahrende Browserleiste, der Held wäre beim Laden angeschnitten.
 - Die Klasse `hat-held` steht **nur** auf der Startseite. Sie macht die
@@ -140,17 +146,19 @@ Ertrag. Die Versionsnummer steht in der Anwendung, wo sie hingehört.
 
 Beta steht an zwei Stellen, mehr braucht es nicht:
 
-- als **Balken ganz oben**, über der Kopfleiste, auf jeder Seite. Er ist
+- als **Balken direkt unter der Navigation**, auf jeder Seite. Er ist
   ausdrücklich **nicht** `sticky`: wer die Seite öffnet, sieht ihn zuerst; wer
-  danach liest, braucht ihn nicht dauerhaft vor der Nase. Die klebende
-  Kopfleiste rückt nach, sobald er oben raus ist.
+  weiterliest, hat ihn nicht dauerhaft vor der Nase. Die klebende Kopfleiste
+  bleibt, der Balken verschwindet unter ihr.
 - als Marke in der Fußzeile jeder Seite.
 
-Der Balken ist auf **45 px Höhe festgelegt** (`--balken`), weil der Held seine
-Höhe aus `calc(100svh - var(--balken))` nimmt. Damit die Rechnung auf schmalen
-Fenstern stimmt, trägt er dort einen kürzeren Satz — mit dem langen brach er
-auf 390 px auf drei Zeilen um, wurde 89 px hoch, und der Held ragte um genau
-diese Differenz aus dem Fenster.
+Auf der Startseite liegt der Balken **im Held** (`position: absolute; top:
+var(--kopf)`) und damit auf dem Bild; auf den übrigen Seiten steht er im
+normalen Fluss hinter der Kopfleiste. Beides ergibt dieselbe Bewegung.
+
+Der kürzere Satz auf schmalen Fenstern bleibt — nicht mehr aus Rechengründen,
+sondern damit der Balken dort einzeilig bleibt und nicht ein Drittel des
+ersten Bildschirms frisst.
 
 Die Farbe ist der Ockerton der Wintergerste aus der Kartenlegende —
 **bewusst nicht Rot**: Rot ist in der Anwendung für Storno, Löschen und

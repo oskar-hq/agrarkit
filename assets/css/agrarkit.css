@@ -113,7 +113,14 @@
   --kurve-weich: cubic-bezier(.4,0,.2,1);
 
   /* Nur fuer die Website */
-  --kopf:     64px;     /* Hoehe der Kopfleiste */
+  /* Die Kopfleiste ist 64 px hoch PLUS dem oberen Sicherheitsrand des
+     Geraets. Auf einem iPhone mit Aussparung sind das 47 px obendrauf.
+     Vorher stand hier nur die 64, waehrend der Held sich um denselben
+     Wert nach oben zog — die Differenz blieb als cremefarbener Spalt
+     zwischen Balken und Bild stehen und machte die klebende Leiste
+     obendrein zu hoch. Eine Zahl, aus der beide rechnen. */
+  --kopf-basis: 64px;
+  --kopf:     calc(var(--kopf-basis) + env(safe-area-inset-top, 0px));
   --balken:   45px;     /* Hoehe des Beta-Balkens */
   --huelle:   1200px;   /* Inhaltsbreite */
   --rand:     24px;     /* Seitenrand */
@@ -175,7 +182,7 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   /* Damit ein Sprungziel nicht unter der klebenden Kopfleiste landet. */
-  scroll-padding-top: 84px;
+  scroll-padding-top: calc(var(--kopf) + 20px);
 }
 
 body {
@@ -265,10 +272,14 @@ p { margin: 0; text-wrap: pretty; }
 .marke-gruen { background: var(--gruen-zart); color: var(--gruen); }
 .marke-beta  { background: var(--beta-zart); color: var(--beta); }
 
-/* Beta-Balken: sitzt ganz oben, ueber der Kopfleiste, und rollt mit der
-   Seite weg. Ausdruecklich kein `sticky` — wer die Seite oeffnet, sieht ihn
-   zuerst; wer danach liest, braucht ihn nicht dauerhaft vor der Nase. Die
-   klebende Kopfleiste rueckt nach, sobald er oben raus ist.
+/* Beta-Balken: sitzt UNTER der Navigation und rollt mit der Seite weg.
+   Ausdruecklich kein `sticky` — wer die Seite oeffnet, sieht ihn zuerst; wer
+   danach liest, braucht ihn nicht dauerhaft vor der Nase. Die klebende
+   Kopfleiste bleibt, der Balken verschwindet unter ihr.
+
+   Auf der Startseite liegt er im Held und damit auf dem Bild (Regel weiter
+   unten); auf den uebrigen Seiten steht er im normalen Fluss hinter der
+   Kopfleiste. Beides ergibt dieselbe Bewegung.
 
    Deckende Flaeche statt getoenter: der Balken liegt ueber dem randlosen
    Held, und eine durchscheinende Flaeche hiesse, dass die Schrift je nach
@@ -380,7 +391,7 @@ p { margin: 0; text-wrap: pretty; }
 }
 .kopf-innen {
   display: flex; align-items: center; gap: 26px;
-  min-height: var(--kopf);
+  min-height: var(--kopf-basis);
 }
 
 .marke-wort {
@@ -465,12 +476,20 @@ details:not([open]) > .menue-blatt { display: none; }
      Grasstreifen in den naechsten Abschnitt. Stand frueher in derselben
      Zeile wie der `border-radius` und ging mit ihm verloren. */
   overflow: hidden;
-  min-height: calc(100vh - var(--balken));
-  min-height: calc(100svh - var(--balken));
+  /* Volle Fensterhoehe. Der Balken liegt jetzt IM Held und muss deshalb
+     nicht mehr abgezogen werden — das erspart die Rechnerei mit seiner
+     Hoehe, die auf schmalen Fenstern ohnehin nie ganz stimmte. */
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex; align-items: center;
-  /* Die Kopfleiste liegt jetzt darueber; ohne diesen Abstand stiesse der
+  /* Kopfleiste und Balken liegen darueber; ohne diesen Abstand stiesse der
      Text bei kurzen Fenstern dagegen. */
-  padding-top: var(--kopf);
+  padding-top: calc(var(--kopf) + var(--balken));
+}
+
+/* Der Balken im Held: direkt unter der Kopfleiste, ueber dem Bild. */
+.held .beta-balken {
+  position: absolute; top: var(--kopf); left: 0; right: 0; z-index: 2;
 }
 .held-bild > img {
   position: absolute; inset: 0; z-index: -2;
