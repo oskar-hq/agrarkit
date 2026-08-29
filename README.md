@@ -52,6 +52,15 @@ sollten zusammen bleiben:
 - Die Klasse `hat-held` steht **nur** auf der Startseite. Sie macht die
   Kopfleiste durchsichtig und ihre Schrift hell, solange nicht gerollt wird;
   auf den Rechtsseiten gibt es kein Bild, dort wäre helle Schrift unlesbar.
+- **`overflow: hidden` auf `.held-bild` muss bleiben.** Das Bild trägt für die
+  Parallaxe ein `scale(1.16)` und ragt damit rund 68 px über seinen Rahmen
+  hinaus. Ohne Beschnitt lief es oben über den Beta-Balken und unten als
+  heller Grasstreifen in den nächsten Abschnitt.
+
+Achtung beim Prüfen: Wer nur mit `prefers-reduced-motion: reduce`
+kontrolliert, sieht solche Fehler **nicht** — dort ist die Skalierung aus.
+Der Beschnittfehler oben ist genau so durchgerutscht. Immer auch einmal mit
+eingeschalteter Bewegung ansehen.
 
 Der Schleier über dem Foto besteht aus drei Verläufen: einer oben für die
 Kopfleiste, einer von links für den Text, einer von unten. Auf schmalen

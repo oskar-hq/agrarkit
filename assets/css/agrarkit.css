@@ -459,6 +459,12 @@ details:not([open]) > .menue-blatt { display: none; }
 
 .held-bild {
   position: relative; isolation: isolate;
+  /* Muss bleiben: das Bild traegt fuer die Parallaxe ein `scale(1.16)` und
+     ragt damit oben und unten rund 68 px ueber diesen Rahmen hinaus. Ohne
+     Beschnitt lief es oben ueber den Beta-Balken und unten als heller
+     Grasstreifen in den naechsten Abschnitt. Stand frueher in derselben
+     Zeile wie der `border-radius` und ging mit ihm verloren. */
+  overflow: hidden;
   min-height: calc(100vh - var(--balken));
   min-height: calc(100svh - var(--balken));
   display: flex; align-items: center;
