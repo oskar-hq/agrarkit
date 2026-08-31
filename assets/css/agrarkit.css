@@ -817,6 +817,11 @@ figure.schirm-mit-text { margin: 0; }
   display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center;
   font-size: .85rem; color: var(--ink-still);
 }
+/* Links in der untersten Zeile sind Beiwerk, kein Angebot — deshalb in der
+   leisen Tinte statt im Gruen der Primaerfarbe, aber unterstrichen, damit sie
+   als Links erkennbar bleiben. --ink-leise haelt 6,0:1. */
+.fuss-unten a { color: var(--ink-leise); text-decoration-color: var(--linie); }
+.fuss-unten a:hover { color: var(--ink); text-decoration-color: currentColor; }
 .fuss-unten .trenner { margin-left: auto; }
 
 /* ---------------------------------------------------------------------------
