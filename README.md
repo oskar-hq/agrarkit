@@ -98,7 +98,7 @@ sollten zusammen bleiben:
   auf den Rechtsseiten gibt es kein Bild, dort wäre helle Schrift unlesbar.
 - **`overflow: hidden` auf `.held-bild` muss bleiben.** Das Bild trägt für die
   Parallaxe ein `scale(1.16)` und ragt damit rund 68 px über seinen Rahmen
-  hinaus. Ohne Beschnitt lief es oben über den Beta-Balken und unten als
+  hinaus. Ohne Beschnitt lief es oben über die Kopfleiste und unten als
   heller Grasstreifen in den nächsten Abschnitt.
 
 Achtung beim Prüfen: Wer nur mit `prefers-reduced-motion: reduce`
@@ -125,6 +125,15 @@ Karteikarte neigt sich zum Zeiger, mit wanderndem Lichtreflex; die
 Bildschirmfotos neigen sich um höchstens 3 Grad; die großen Hauptknöpfe
 ziehen sich bis zu 6 px zum Zeiger. Jede Zeigerbewegung wird auf ein Bild
 pro Bildschirmaktualisierung gebündelt.
+
+**Wind** (auch auf dem Handy): Die Notizzettel hängen an ihrem Klebestreifen
+und schwingen wie gedämpfte Pendel. Schnelles Wischen quer mit Maus oder
+Finger stößt sie an (Zettel nahe am Zeiger stärker), schnelles Rollen lässt
+sie flattern. Langsame Bewegungen tun nichts. Gesetzt werden die CSS-
+Eigenschaften `rotate` und `translate`, damit sich das nicht mit dem
+`transform` der Einblendung beißt; die Schleife läuft nur, solange sich
+etwas bewegt. Auf dem Handy hängen die Zettel unter der Aufnahme statt
+darauf, ohne Pfeil.
 
 `assets/js/kartei.js` ist keine Bewegung, sondern Funktion (Blättern,
 Kartenpunkte antippen) und läuft deshalb auch im ruhigen Modus.
@@ -205,19 +214,11 @@ Ertrag. Die Versionsnummer steht in der Anwendung, wo sie hingehört.
 
 Beta steht an zwei Stellen, mehr braucht es nicht:
 
-- als **Balken direkt unter der Navigation**, auf jeder Seite. Er ist
-  ausdrücklich **nicht** `sticky`: wer die Seite öffnet, sieht ihn zuerst; wer
-  weiterliest, hat ihn nicht dauerhaft vor der Nase. Die klebende Kopfleiste
-  bleibt, der Balken verschwindet unter ihr.
-- als Marke in der Fußzeile jeder Seite.
+- im **Preisabschnitt** als „Beta-Zugang, 0 €“,
+- als **Marke in der Fußzeile** jeder Seite.
 
-Auf der Startseite liegt der Balken **im Held** (`position: absolute; top:
-var(--kopf)`) und damit auf dem Bild; auf den übrigen Seiten steht er im
-normalen Fluss hinter der Kopfleiste. Beides ergibt dieselbe Bewegung.
-
-Der kürzere Satz auf schmalen Fenstern bleibt — nicht mehr aus Rechengründen,
-sondern damit der Balken dort einzeilig bleibt und nicht ein Drittel des
-ersten Bildschirms frisst.
+Einen Balken unter der Navigation gab es früher; er ist entfallen, damit
+der erste Bildschirm dem Slogan gehört.
 
 Die Farbe ist der Ockerton der Wintergerste aus der Kartenlegende —
 **bewusst nicht Rot**: Rot ist in der Anwendung für Storno, Löschen und

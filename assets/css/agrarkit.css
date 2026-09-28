@@ -110,10 +110,7 @@
      derselbe Farbton vertieft kommt auf 6,0:1. Die Flaeche bleibt die
      helle Gerste, die Schrift wird die dunkle. */
   --beta:         #7A5A18;                /* 6,0:1 auf --grund */
-  --beta-satz:    #5F4712;                /* Fliesstext im Balken */
   --beta-zart:    rgba(185,138,46,.18);
-  --beta-flaeche: #F6E9CC;                /* Balkenflaeche, deckend */
-  --beta-kante:   rgba(185,138,46,.55);
 
   /* Masse */
   --tap: 44px;
@@ -141,7 +138,6 @@
      obendrein zu hoch. Eine Zahl, aus der beide rechnen. */
   --kopf-basis: 64px;
   --kopf:     calc(var(--kopf-basis) + env(safe-area-inset-top, 0px));
-  --balken:   45px;     /* Hoehe des Beta-Balkens */
   --huelle:   1200px;   /* Inhaltsbreite */
   --rand:     24px;     /* Seitenrand */
   --luft:     clamp(72px, 9vw, 128px);   /* Abstand zwischen Abschnitten */
@@ -314,47 +310,9 @@ p { margin: 0; text-wrap: pretty; }
 .marke-gruen { background: var(--gruen-zart); color: var(--gruen); }
 .marke-beta  { background: var(--beta-zart); color: var(--beta); }
 
-/* Beta-Balken: sitzt UNTER der Navigation und rollt mit der Seite weg.
-   Ausdruecklich kein `sticky` — wer die Seite oeffnet, sieht ihn zuerst; wer
-   danach liest, braucht ihn nicht dauerhaft vor der Nase. Die klebende
-   Kopfleiste bleibt, der Balken verschwindet unter ihr.
-
-   Auf der Startseite liegt er im Held und damit auf dem Bild (Regel weiter
-   unten); auf den uebrigen Seiten steht er im normalen Fluss hinter der
-   Kopfleiste. Beides ergibt dieselbe Bewegung.
-
-   Deckende Flaeche statt getoenter: der Balken liegt ueber dem randlosen
-   Held, und eine durchscheinende Flaeche hiesse, dass die Schrift je nach
-   Bildausschnitt auf etwas anderem steht. */
-.beta-balken {
-  margin: 0;
-  background: var(--beta-flaeche);
-  border-bottom: 1px solid var(--beta-kante);
-  color: var(--beta);
-  font-size: .875rem;
-}
-.beta-balken-innen {
-  min-height: calc(var(--balken) - 1px);
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  padding-block: 9px;
-}
-.beta-balken .wort {
-  font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  flex: none;
-}
-.beta-balken .satz { color: var(--beta-satz); }
-
-/* Auf schmalen Fenstern ein kuerzerer Satz. Nicht Kosmetik: mit dem langen
-   Satz brach der Balken auf 390 px auf drei Zeilen um, wurde 89 statt 45 px
-   hoch — und weil der Held seine Hoehe aus `calc(100svh - var(--balken))`
-   nimmt, ragte er genau um diese Differenz aus dem Fenster. Eine Zeile
-   haelt die Rechnung stabil. */
-.nur-schmal { display: none; }
-@media (max-width: 760px) {
-  .beta-balken { font-size: .8125rem; }
-  .beta-balken .nur-breit { display: none; }
-  .beta-balken .nur-schmal { display: inline; }
-}
+/* Den Beta-Balken unter der Navigation gibt es nicht mehr. Beta steht im
+   Preisabschnitt („Beta-Zugang") und als Marke in der Fusszeile — das
+   reicht, und der erste Bildschirm gehoert dem Slogan. */
 
 /* ---------------------------------------------------------------------------
    Raster
@@ -503,8 +461,7 @@ details:not([open]) > .menue-blatt { display: none; }
    `100svh` und nicht `100vh`: auf dem Handy meint `vh` die Hoehe OHNE die
    ein- und ausfahrende Browserleiste, der Held waere dort beim Laden
    angeschnitten. `svh` nimmt die kleine Variante und passt in beiden
-   Zustaenden. Abgezogen sind die 44 px des Beta-Balkens, damit Balken plus
-   Held zusammen genau eine Fensterhoehe ergeben. */
+   Zustaenden. */
 .held { padding: 0; }
 
 /* Die Kopfleiste klebt, steht dabei aber im normalen Fluss und nimmt also
@@ -516,24 +473,17 @@ details:not([open]) > .menue-blatt { display: none; }
   position: relative; isolation: isolate;
   /* Muss bleiben: das Bild traegt fuer die Parallaxe ein `scale(1.16)` und
      ragt damit oben und unten rund 68 px ueber diesen Rahmen hinaus. Ohne
-     Beschnitt lief es oben ueber den Beta-Balken und unten als heller
+     Beschnitt lief es oben ueber die Kopfleiste und unten als heller
      Grasstreifen in den naechsten Abschnitt. Stand frueher in derselben
      Zeile wie der `border-radius` und ging mit ihm verloren. */
   overflow: hidden;
-  /* Volle Fensterhoehe. Der Balken liegt jetzt IM Held und muss deshalb
-     nicht mehr abgezogen werden — das erspart die Rechnerei mit seiner
-     Hoehe, die auf schmalen Fenstern ohnehin nie ganz stimmte. */
+  /* Volle Fensterhoehe. */
   min-height: 100vh;
   min-height: 100svh;
   display: flex; align-items: center;
-  /* Kopfleiste und Balken liegen darueber; ohne diesen Abstand stiesse der
-     Text bei kurzen Fenstern dagegen. */
-  padding-top: calc(var(--kopf) + var(--balken));
-}
-
-/* Der Balken im Held: direkt unter der Kopfleiste, ueber dem Bild. */
-.held .beta-balken {
-  position: absolute; top: var(--kopf); left: 0; right: 0; z-index: 2;
+  /* Die Kopfleiste liegt darueber; ohne diesen Abstand stiesse der Text
+     bei kurzen Fenstern dagegen. */
+  padding-top: var(--kopf);
 }
 .held-bild > img {
   position: absolute; inset: 0; z-index: -2;
@@ -768,8 +718,8 @@ details:not([open]) > .menue-blatt { display: none; }
 @media (max-width: 1000px) {
   .held-huelle { grid-template-columns: minmax(0, 1fr); gap: 44px; }
   /* Mit der Karte ist der Held hoeher als das Fenster und der Text rutscht
-     nach oben — ohne die 36 px klebte die Augenbraue am Beta-Balken. */
-  .held-bild { padding-top: calc(var(--kopf) + var(--balken) + 36px); padding-bottom: 56px; }
+     nach oben — ohne die 48 px klebte die Augenbraue an der Kopfleiste. */
+  .held-bild { padding-top: calc(var(--kopf) + 48px); padding-bottom: 56px; }
   .kartei { width: min(340px, calc(100% - 28px)); margin-top: 0; justify-self: start; }
   .kartei-blatt { padding: 22px 20px 18px; }
   .kartei-name { font-size: 1.75rem; }
@@ -965,6 +915,10 @@ figure.schirm-mit-text { margin: 0; }
   font-size: 1.28rem; line-height: 1.12;
   box-shadow: 0 14px 28px -14px rgba(14,22,17,.55), 0 1px 2px rgba(14,22,17,.12);
   transform: rotate(var(--dreh, -3deg));
+  /* Haengt am Klebestreifen: dort ist der Drehpunkt, wenn der Wind kommt
+     (bewegung.js setzt dafuer `rotate` und `translate`, die sich mit dem
+     `transform` der Einblendung vertragen, statt es zu ueberschreiben). */
+  transform-origin: 50% -4px;
   pointer-events: none;
 }
 /* Klebestreifen oben */
@@ -1035,8 +989,16 @@ figure.schirm-mit-text { margin: 0; }
    pumpt, wirkt nervoes. */
 .ziel:hover::after, .ziel.offen::after { animation-play-state: paused; opacity: 0; }
 
+/* Auf dem Handy ist die Aufnahme zu klein, um einen Zettel darauf zu kleben.
+   Dort haengt er unter ihr, halb ueber der Kante, ohne Pfeil — und kann
+   trotzdem im Wind wackeln. */
 @media (max-width: 760px) {
-  .notiz { display: none; }
+  .notiz {
+    position: relative; inset: auto;
+    display: table; margin: -20px 0 0 12px;
+    font-size: 1.08rem; padding: 9px 14px 10px;
+  }
+  .notiz-pfeil { display: none; }
   .schirm-leiste { height: 28px; }
   .schirm-leiste i { width: 8px; height: 8px; }
   .ziel { width: 36px; height: 36px; margin: -18px 0 0 -18px; }

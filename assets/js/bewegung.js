@@ -5,7 +5,9 @@
    2. Sanfte Parallaxe im Held.
    3. Die Kopfleiste bekommt eine Kante, sobald die Seite nicht mehr oben steht.
    4. Die Kartenaufnahme liegt schraeg und richtet sich beim Rollen auf.
-   5. Nur mit Maus: Abendlicht im Held, Karteikarte und Aufnahmen neigen
+   5. Wind: schnelles Wischen (Maus oder Finger) und schnelles Rollen lassen
+      die Notizzettel an ihrem Klebestreifen schwingen.
+   6. Nur mit Maus: Abendlicht im Held, Karteikarte und Aufnahmen neigen
       sich zum Zeiger, Hauptknoepfe ziehen sich ein Stueck zu ihm hin.
 
    Bewegt werden nur `transform`, `opacity` und CSS-Variablen, die in
@@ -150,6 +152,123 @@
       addEventListener("scroll", anfordern, { passive: true });
       addEventListener("resize", anfordern, { passive: true });
       rechnen();
+    }
+
+    /* --- Wind -------------------------------------------------------------
+       Jeder Zettel ist ein gedaempftes Pendel, aufgehaengt am Klebestreifen.
+       Wind gibt ihm einen Stoss, eine Feder holt ihn zurueck in seine
+       Schraeglage, die Daempfung laesst ihn ein paar Mal nachschwingen.
+
+       Windquellen:
+       - Maus: nur schnelles Wischen zaehlt (ab etwa 0,5 px/ms quer), und
+         Zettel nahe am Zeiger bekommen mehr ab als entfernte.
+       - Finger: Wischen quer ueber den Bildschirm, genauso.
+       - Rollen: schnelles Rollen ist Fahrtwind — ungerichtet, eher ein
+         Flattern als ein Schwung.
+
+       Gerechnet wird nur, solange sich etwas bewegt. Steht alles still,
+       endet die Schleife und die Zettel bekommen ihren Ruhezustand zurueck. */
+    const zettel = Array.from(document.querySelectorAll(".notiz")).map((el) => ({
+      el, winkel: 0, schwung: 0, sichtbar: false,
+      // Kein Zettel wie der andere: leicht unterschiedliche Masse und
+      // Steifigkeit, sonst wackeln alle im Gleichtakt wie eine Maschine.
+      masse: 0.8 + Math.random() * 0.45,
+      feder: 0.011 + Math.random() * 0.005,
+    }));
+    if (zettel.length) {
+      const sicht = new IntersectionObserver((eintraege) => {
+        for (const e of eintraege) {
+          const z = zettel.find((z) => z.el === e.target);
+          if (z) z.sichtbar = e.isIntersecting;
+        }
+      });
+      for (const z of zettel) sicht.observe(z.el);
+
+      const DAEMPFUNG = 0.03, GRENZE = 16;
+      let laeuft = false, zuletzt = 0;
+
+      const schritt = (jetzt) => {
+        const dt = Math.min(3, (jetzt - (zuletzt || jetzt)) / 16.67 || 1);
+        zuletzt = jetzt;
+        let unruhe = 0;
+        for (const z of zettel) {
+          z.schwung += (-z.feder * z.winkel - DAEMPFUNG * z.schwung) * dt;
+          z.winkel = Math.max(-GRENZE, Math.min(GRENZE, z.winkel + z.schwung * dt));
+          unruhe += Math.abs(z.winkel) + Math.abs(z.schwung);
+          // Ein Hauch seitliches Mitgehen, damit es nach Papier aussieht und
+          // nicht nach einem Zeiger auf einer Achse.
+          z.el.style.rotate = `${z.winkel.toFixed(2)}deg`;
+          z.el.style.translate = `${(z.winkel * 0.5).toFixed(2)}px ${(Math.abs(z.winkel) * -0.12).toFixed(2)}px`;
+        }
+        if (unruhe > 0.05) { requestAnimationFrame(schritt); return; }
+        laeuft = false; zuletzt = 0;
+        for (const z of zettel) {
+          z.winkel = z.schwung = 0;
+          z.el.style.removeProperty("rotate");
+          z.el.style.removeProperty("translate");
+        }
+      };
+      const anstossen = () => {
+        if (!laeuft) { laeuft = true; requestAnimationFrame(schritt); }
+      };
+
+      // Stoss aus einer Querbewegung an Stelle (x, y) mit Tempo v (px/ms).
+      const wehen = (x, y, v) => {
+        const staerke = Math.sign(v) * Math.max(0, Math.abs(v) - 0.45);
+        if (!staerke) return;
+        let getroffen = false;
+        for (const z of zettel) {
+          if (!z.sichtbar) continue;
+          const r = z.el.getBoundingClientRect();
+          const abstand = Math.hypot(x - (r.left + r.width / 2), y - (r.top + r.height / 2));
+          const naehe = Math.exp(-abstand / 520);
+          // Jeder Stoss und der Schwung insgesamt sind gedeckelt: ein Zettel
+          // soll flattern, nicht sich ueberschlagen. Hoechstens rund 11 Grad.
+          z.schwung += staerke * 0.3 * naehe / z.masse;
+          z.schwung = Math.max(-1.3, Math.min(1.3, z.schwung));
+          getroffen = true;
+        }
+        if (getroffen) anstossen();
+      };
+
+      let vorher = null;
+      const verfolgen = (x, y, t) => {
+        if (vorher && t > vorher.t) {
+          const v = (x - vorher.x) / (t - vorher.t);
+          wehen(x, y, v);
+        }
+        vorher = { x, y, t };
+      };
+      addEventListener("pointermove", (e) => {
+        if (e.pointerType === "mouse" || e.pointerType === "pen") verfolgen(e.clientX, e.clientY, e.timeStamp);
+      }, { passive: true });
+      // Finger: pointermove bricht ab, sobald der Browser rollt; touchmove
+      // laeuft weiter und liefert auch das seitliche Wischen.
+      addEventListener("touchmove", (e) => {
+        const f = e.touches[0];
+        if (f) verfolgen(f.clientX, f.clientY, e.timeStamp);
+      }, { passive: true });
+      addEventListener("touchend", () => { vorher = null; }, { passive: true });
+
+      // Fahrtwind beim schnellen Rollen.
+      let rollVorher = null;
+      addEventListener("scroll", () => {
+        const t = performance.now(), y = scrollY;
+        if (rollVorher && t > rollVorher.t) {
+          const v = Math.abs(y - rollVorher.y) / (t - rollVorher.t);
+          if (v > 1.2) {
+            let getroffen = false;
+            for (const z of zettel) {
+              if (!z.sichtbar) continue;
+              z.schwung += (Math.random() - 0.5) * Math.min(v, 6) * 0.35 / z.masse;
+              z.schwung = Math.max(-1.3, Math.min(1.3, z.schwung));
+              getroffen = true;
+            }
+            if (getroffen) anstossen();
+          }
+        }
+        rollVorher = { t, y };
+      }, { passive: true });
     }
 
     /* --- Alles Weitere nur mit einer echten Maus -------------------------
