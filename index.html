@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agrarkit — Ackerschlagkartei aus Schleswig-Holstein</title>
+<title>Agrarkit — Die Ackerschlagkartei von nebenan</title>
 <meta name="description" content="Agrarkit ist eine Ackerschlagkartei für den norddeutschen Betrieb: Schläge mit Knicks und Hindernissen, Düngebedarf mit Saldo, ENDO-SH-Import und -Export. Läuft im Browser, auch auf dem Handy im Schlepper.">
 <link rel="canonical" href="https://agrarkit.de/">
 
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="de_DE">
 <meta property="og:site_name" content="Agrarkit">
-<meta property="og:title" content="Agrarkit — Ackerschlagkartei aus Schleswig-Holstein">
+<meta property="og:title" content="Agrarkit — Die Ackerschlagkartei von nebenan">
 <meta property="og:description" content="Schläge, Düngung und ENDO-SH in einem Programm. Läuft im Browser, auch auf dem Handy im Schlepper.">
 <meta property="og:url" content="https://agrarkit.de/">
 <meta property="og:image" content="https://agrarkit.de/assets/img/og.jpg">
@@ -26,6 +26,7 @@
 
 <link rel="preload" href="assets/fonts/SpaceGrotesk-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SpaceGrotesk-Medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/InstrumentSerif-Italic.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="assets/css/agrarkit.css">
 
@@ -38,6 +39,7 @@
   "operatingSystem": "Web",
   "url": "https://agrarkit.de/",
   "inLanguage": "de",
+  "slogan": "Die Ackerschlagkartei von nebenan",
   "description": "Ackerschlagkartei für den norddeutschen Betrieb: Schläge mit Knicks und Hindernissen, Düngebedarf mit Saldo, ENDO-SH-Import und -Export.",
   "author": {
     "@type": "Person",
@@ -119,14 +121,37 @@
         <div class="huelle held-huelle">
         <div class="held-inhalt">
           <span class="augenbraue">Agrarsoftware aus Schleswig-Holstein</span>
-          <h1 class="titel-held">Schläge, Düngung und ENDO&#8209;SH in einem Programm.</h1>
+          <h1 class="titel-held">Die Ackerschlag&shy;kartei <em class="serif">von nebenan.</em></h1>
           <p class="fliess-gross">
-            Die Ackerschlagkartei für den norddeutschen Betrieb. Umrisse mit
-            Knicks, Düngebedarf mit Saldo, ENDO&#8209;SH rein und wieder raus.
+            Schläge mit Knicks, Düngebedarf mit Saldo, ENDO&#8209;SH rein und
+            wieder raus. Gebaut in Pommerby, für den Betrieb nebenan.
           </p>
           <div class="knopf-reihe auf-dunkel">
             <a class="knopf knopf-primaer knopf-gross" href="https://app.agrarkit.de/registrieren">Betrieb anlegen</a>
             <a class="knopf knopf-gross" href="#funktionen">Ansehen, was drin ist</a>
+          </div>
+        </div>
+
+        <!-- Karteikarte: das Leitbild der Seite. Die Werte sind ein Beispiel,
+             kein echter Betrieb; fuer Vorlesewerkzeuge deshalb als ein Bild
+             mit einer Beschreibung statt als Tabelle. -->
+        <div class="kartei" role="img" aria-label="Beispiel einer Karteikarte in Agrarkit: Schlag 12, Achterkoppel, Winterweizen, 8,42 Hektar Nutzfläche, Stickstoff-Saldo plus 3 Kilogramm je Hektar, ENDO-SH geprüft">
+          <div class="kartei-blatt kartei-blatt-hinten" aria-hidden="true"></div>
+          <div class="kartei-blatt" aria-hidden="true">
+            <span class="kartei-reiter">Schlag 12</span>
+            <div class="kartei-kopf">
+              <span class="kartei-name">Achterkoppel</span>
+              <span class="kartei-jahr zahl">Ernte 2026</span>
+            </div>
+            <dl class="kartei-zeilen">
+              <div><dt>Kultur</dt><dd><i class="punkt punkt-weizen"></i>Winterweizen</dd></div>
+              <div><dt>Nutzfläche</dt><dd class="zahl">8,42 ha</dd></div>
+              <div><dt>Knicks</dt><dd class="zahl">− 0,31 ha</dd></div>
+              <div><dt>Boden · AZ</dt><dd class="zahl">lS · 52</dd></div>
+              <div><dt>N-Bedarf</dt><dd class="zahl">196 kg/ha</dd></div>
+              <div><dt>N-Saldo</dt><dd class="zahl kartei-saldo">+ 3 kg/ha</dd></div>
+            </dl>
+            <span class="kartei-stempel">ENDO&#8209;SH<br>geprüft</span>
           </div>
         </div>
         </div>
@@ -140,7 +165,7 @@
     <div class="huelle">
       <div class="abschnitt-kopf mitte">
         <span class="augenbraue">Was Agrarkit macht</span>
-        <h2 class="titel-gross">Der Papierkram, den die Fläche nun einmal mitbringt.</h2>
+        <h2 class="titel-gross">Der Papierkram, den die Fläche <em class="serif">nun einmal</em> mitbringt.</h2>
         <p class="fliess-gross">
           Kein Baukasten mit Modulen, die man einzeln dazubucht. Was im Betrieb
           zusammengehört, gehört auch in der Software zusammen.
@@ -149,6 +174,7 @@
 
       <div class="raster raster-3 raster-funktionen">
         <article class="funktion">
+          <span class="funktion-nr zahl" aria-hidden="true">01</span>
           <span class="funktion-zeichen" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/>
@@ -162,6 +188,7 @@
         </article>
 
         <article class="funktion">
+          <span class="funktion-nr zahl" aria-hidden="true">02</span>
           <span class="funktion-zeichen" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 6h16M4 12h16M4 18h9"/>
@@ -175,6 +202,7 @@
         </article>
 
         <article class="funktion">
+          <span class="funktion-nr zahl" aria-hidden="true">03</span>
           <span class="funktion-zeichen" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/>
@@ -188,6 +216,7 @@
         </article>
 
         <article class="funktion">
+          <span class="funktion-nr zahl" aria-hidden="true">04</span>
           <span class="funktion-zeichen" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
@@ -201,6 +230,7 @@
         </article>
 
         <article class="funktion">
+          <span class="funktion-nr zahl" aria-hidden="true">05</span>
           <span class="funktion-zeichen" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 10h18M9 4v16"/>
@@ -214,6 +244,7 @@
         </article>
 
         <article class="funktion">
+          <span class="funktion-nr zahl" aria-hidden="true">06</span>
           <span class="funktion-zeichen" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/>
@@ -236,7 +267,7 @@
     <div class="huelle huelle-breit">
       <div class="abschnitt-kopf mitte">
         <span class="augenbraue">Die Karte</span>
-        <h2 class="titel-gross">Der ganze Betrieb auf einem Bild.</h2>
+        <h2 class="titel-gross">Der ganze Betrieb auf <em class="serif">einem</em> Bild.</h2>
         <p class="fliess-gross">
           Alle Schläge nach Kultur eingefärbt, über dem Luftbild oder auf heller
           Karte. Die Legende zählt mit, wie viel Hektar auf welche Kultur entfällt.
@@ -331,12 +362,12 @@
   <!-- ====================================================================
        ENDO-SH
        ==================================================================== -->
-  <section class="abschnitt" id="endo-sh">
+  <section class="abschnitt abschnitt-dunkel" id="endo-sh">
     <div class="huelle">
       <div class="schaufenster schaufenster-zwei">
         <div class="schaufenster-text">
           <span class="augenbraue">ENDO&#8209;SH</span>
-          <h2 class="titel-mittel">Die Meldung wird geprüft, bevor sie das Haus verlässt.</h2>
+          <h2 class="titel-mittel">Die Meldung wird geprüft, <em class="serif">bevor</em> sie das Haus verlässt.</h2>
           <p class="fliess">
             Agrarkit zählt vor dem Herunterladen zusammen, was in der Datei
             steht: wie viele Düngungen, über wie viele Schläge, mit wie vielen
@@ -348,7 +379,7 @@
             etwas nicht stimmt, steht das dort — nicht erst in der Rückmeldung
             der Behörde.
           </p>
-          <div class="knopf-reihe">
+          <div class="knopf-reihe auf-dunkel">
             <a class="knopf knopf-primaer" href="https://app.agrarkit.de/registrieren">Betrieb anlegen</a>
           </div>
         </div>
@@ -371,7 +402,7 @@
       <div class="abschnitt-kopf">
         <div class="kulturstreifen" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
         <span class="augenbraue">Warum es Agrarkit gibt</span>
-        <h2 class="titel-gross">Gebaut auf einem Betrieb, nicht in einem Großraumbüro.</h2>
+        <h2 class="titel-gross titel-aussage">Nicht aus dem Großraumbüro. <em class="serif">Von nebenan.</em></h2>
       </div>
 
       <div class="raster raster-3">
@@ -563,7 +594,7 @@
              width="1200" height="800" loading="lazy"
              alt="Grünes Getreidefeld unter einem Wolkenhimmel">
         <span class="augenbraue">Loslegen</span>
-        <h2 class="titel-gross">Einen Betrieb anlegen dauert länger als das Passwort auszudenken.</h2>
+        <h2 class="titel-gross">Einen Betrieb anlegen dauert länger <em class="serif">als das Passwort auszudenken.</em></h2>
         <p class="fliess-gross">
           Danach die Schläge aus ENDO&#8209;SH einlesen — und beim nächsten
           Nachweis ist die Datei schon fertig.
@@ -591,7 +622,8 @@
           </svg>
           Agrarkit
         </a>
-        <p>Agrarsoftware aus Schleswig-Holstein. Eine Ackerschlagkartei für den norddeutschen Betrieb.</p>
+        <p class="fuss-slogan">Die Ackerschlagkartei <em class="serif">von nebenan.</em></p>
+        <p>Agrarsoftware aus Schleswig-Holstein, gebaut in Pommerby.</p>
         <div class="kulturstreifen" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
       </div>
 
