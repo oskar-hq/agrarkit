@@ -17,6 +17,7 @@ sitemap.xml
 assets/
   css/agrarkit.css    das einzige Stylesheet
   fonts/              Space Grotesk als WOFF2, auf Latin-1 verkleinert
+                      Instrument Serif (kursiv) als Akzentschrift, Latin
   img/                Fotos und Bildschirmfotos, WebP in zwei Größen
   img/favicon.svg     Logo aus dem Logo-Material
   img/og.jpg          Vorschaubild 1200 × 630
@@ -37,6 +38,29 @@ Abschnittsrhythmus, Bildkarten, Preis, Fragen. Die Anwendung setzt Titel auf
 
 Dunkelmodus und `prefers-reduced-motion` sind aus demselben Designsystem
 übernommen.
+
+### Slogan und Leitbild
+
+Der Slogan lautet **„Die Ackerschlagkartei von nebenan."** Er steht im Held
+als Überschrift, im `<title>`, im Vorschaubild-Titel (`og:title`), als
+`slogan` im strukturierten Datensatz und in der Fußzeile.
+
+Drei Dinge geben der Seite ein eigenes Gesicht und gehören zusammen:
+
+- **Die Karteikarte im Held** (`.kartei`). Papier mit blauen Linien, roter
+  Kopflinie, Reiter mit Schlagnummer, Stempel „ENDO‑SH geprüft". Die Werte
+  sind ein Beispiel, kein echter Betrieb. Sie bleibt in beiden Farbmodi
+  Papier und entfällt unter 1000 px.
+- **Instrument Serif kursiv** als zweite Stimme, nur für den betonten Teil
+  einer Überschrift (`<em class="serif">`), nie für Fließtext oder Zahlen in
+  Tabellen. Selbst gehostet wie Space Grotesk (SIL OFL), also keine
+  Verbindung zu Google Fonts.
+- **Ein einziger dunkler Block** (`.abschnitt-dunkel`, derzeit ENDO‑SH). Er
+  stellt die Tokens lokal um, alles darin stimmt ohne eigene Regeln. Nicht
+  direkt hinter den Held legen, sonst folgen zwei dunkle Flächen aufeinander.
+
+Dazu ein Hauch Papierkorn über der ganzen Seite (`body::after`), nur über die
+Deckkraft, ohne Mischmodus.
 
 ### Der Held
 
