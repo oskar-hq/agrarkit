@@ -110,10 +110,7 @@
      derselbe Farbton vertieft kommt auf 6,0:1. Die Flaeche bleibt die
      helle Gerste, die Schrift wird die dunkle. */
   --beta:         #7A5A18;                /* 6,0:1 auf --grund */
-  --beta-satz:    #5F4712;                /* Fliesstext im Balken */
   --beta-zart:    rgba(185,138,46,.18);
-  --beta-flaeche: #F6E9CC;                /* Balkenflaeche, deckend */
-  --beta-kante:   rgba(185,138,46,.55);
 
   /* Masse */
   --tap: 44px;
@@ -141,7 +138,6 @@
      obendrein zu hoch. Eine Zahl, aus der beide rechnen. */
   --kopf-basis: 64px;
   --kopf:     calc(var(--kopf-basis) + env(safe-area-inset-top, 0px));
-  --balken:   45px;     /* Hoehe des Beta-Balkens */
   --huelle:   1200px;   /* Inhaltsbreite */
   --rand:     24px;     /* Seitenrand */
   --luft:     clamp(72px, 9vw, 128px);   /* Abstand zwischen Abschnitten */
@@ -227,6 +223,10 @@ body::after {
 }
 @media (prefers-color-scheme: dark) { body::after { opacity: .06; } }
 
+/* Markierter Text in hellem Gerstengelb statt Browserblau — auch das ist
+   Teil der Seite. */
+::selection { background: rgba(242,217,162,.85); color: #26392F; }
+
 /* Ziffern in Zahlenreihen muessen untereinander stehen — wie in der Anwendung. */
 .zahl, .kennzahl-wert, .held-zahl strong, .preis-zahl { font-variant-numeric: tabular-nums; }
 
@@ -310,47 +310,9 @@ p { margin: 0; text-wrap: pretty; }
 .marke-gruen { background: var(--gruen-zart); color: var(--gruen); }
 .marke-beta  { background: var(--beta-zart); color: var(--beta); }
 
-/* Beta-Balken: sitzt UNTER der Navigation und rollt mit der Seite weg.
-   Ausdruecklich kein `sticky` — wer die Seite oeffnet, sieht ihn zuerst; wer
-   danach liest, braucht ihn nicht dauerhaft vor der Nase. Die klebende
-   Kopfleiste bleibt, der Balken verschwindet unter ihr.
-
-   Auf der Startseite liegt er im Held und damit auf dem Bild (Regel weiter
-   unten); auf den uebrigen Seiten steht er im normalen Fluss hinter der
-   Kopfleiste. Beides ergibt dieselbe Bewegung.
-
-   Deckende Flaeche statt getoenter: der Balken liegt ueber dem randlosen
-   Held, und eine durchscheinende Flaeche hiesse, dass die Schrift je nach
-   Bildausschnitt auf etwas anderem steht. */
-.beta-balken {
-  margin: 0;
-  background: var(--beta-flaeche);
-  border-bottom: 1px solid var(--beta-kante);
-  color: var(--beta);
-  font-size: .875rem;
-}
-.beta-balken-innen {
-  min-height: calc(var(--balken) - 1px);
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  padding-block: 9px;
-}
-.beta-balken .wort {
-  font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  flex: none;
-}
-.beta-balken .satz { color: var(--beta-satz); }
-
-/* Auf schmalen Fenstern ein kuerzerer Satz. Nicht Kosmetik: mit dem langen
-   Satz brach der Balken auf 390 px auf drei Zeilen um, wurde 89 statt 45 px
-   hoch — und weil der Held seine Hoehe aus `calc(100svh - var(--balken))`
-   nimmt, ragte er genau um diese Differenz aus dem Fenster. Eine Zeile
-   haelt die Rechnung stabil. */
-.nur-schmal { display: none; }
-@media (max-width: 760px) {
-  .beta-balken { font-size: .8125rem; }
-  .beta-balken .nur-breit { display: none; }
-  .beta-balken .nur-schmal { display: inline; }
-}
+/* Den Beta-Balken unter der Navigation gibt es nicht mehr. Beta steht im
+   Preisabschnitt („Beta-Zugang") und als Marke in der Fusszeile — das
+   reicht, und der erste Bildschirm gehoert dem Slogan. */
 
 /* ---------------------------------------------------------------------------
    Raster
@@ -499,8 +461,7 @@ details:not([open]) > .menue-blatt { display: none; }
    `100svh` und nicht `100vh`: auf dem Handy meint `vh` die Hoehe OHNE die
    ein- und ausfahrende Browserleiste, der Held waere dort beim Laden
    angeschnitten. `svh` nimmt die kleine Variante und passt in beiden
-   Zustaenden. Abgezogen sind die 44 px des Beta-Balkens, damit Balken plus
-   Held zusammen genau eine Fensterhoehe ergeben. */
+   Zustaenden. */
 .held { padding: 0; }
 
 /* Die Kopfleiste klebt, steht dabei aber im normalen Fluss und nimmt also
@@ -512,24 +473,17 @@ details:not([open]) > .menue-blatt { display: none; }
   position: relative; isolation: isolate;
   /* Muss bleiben: das Bild traegt fuer die Parallaxe ein `scale(1.16)` und
      ragt damit oben und unten rund 68 px ueber diesen Rahmen hinaus. Ohne
-     Beschnitt lief es oben ueber den Beta-Balken und unten als heller
+     Beschnitt lief es oben ueber die Kopfleiste und unten als heller
      Grasstreifen in den naechsten Abschnitt. Stand frueher in derselben
      Zeile wie der `border-radius` und ging mit ihm verloren. */
   overflow: hidden;
-  /* Volle Fensterhoehe. Der Balken liegt jetzt IM Held und muss deshalb
-     nicht mehr abgezogen werden — das erspart die Rechnerei mit seiner
-     Hoehe, die auf schmalen Fenstern ohnehin nie ganz stimmte. */
+  /* Volle Fensterhoehe. */
   min-height: 100vh;
   min-height: 100svh;
   display: flex; align-items: center;
-  /* Kopfleiste und Balken liegen darueber; ohne diesen Abstand stiesse der
-     Text bei kurzen Fenstern dagegen. */
-  padding-top: calc(var(--kopf) + var(--balken));
-}
-
-/* Der Balken im Held: direkt unter der Kopfleiste, ueber dem Bild. */
-.held .beta-balken {
-  position: absolute; top: var(--kopf); left: 0; right: 0; z-index: 2;
+  /* Die Kopfleiste liegt darueber; ohne diesen Abstand stiesse der Text
+     bei kurzen Fenstern dagegen. */
+  padding-top: var(--kopf);
 }
 .held-bild > img {
   position: absolute; inset: 0; z-index: -2;
@@ -575,7 +529,18 @@ details:not([open]) > .menue-blatt { display: none; }
 /* Der Text bleibt in der Huelle, das Bild nicht. Rechts daneben die
    Karteikarte — unter 1000 px entfaellt sie, dort gehoert der Platz dem
    Text. */
+/* Abendlicht: ein warmer Schein, der dem Zeiger ueber das Foto folgt. Liegt
+   ueber dem Schleier (deshalb z-index 0 und der Inhalt darueber auf 1), nur
+   Deckkraft, kein Mischmodus. Erscheint erst, wenn sich eine Maus bewegt. */
+.held-licht {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(640px circle at var(--mx, 70%) var(--my, 40%),
+    rgba(255,221,160,.22), rgba(255,221,160,.08) 38%, rgba(255,221,160,0) 62%);
+  opacity: 0; transition: opacity 700ms var(--kurve-weich);
+}
+.held-bild.hat-zeiger .held-licht { opacity: 1; }
 .held-huelle {
+  position: relative; z-index: 1;
   width: 100%;
   display: grid; align-items: center;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -616,7 +581,19 @@ details:not([open]) > .menue-blatt { display: none; }
   transform: rotate(-2.5deg);
   color: #26392F;
 }
+/* Der Stapel: drei Karten uebereinander im selben Rasterfeld. Welche vorn
+   liegt, sagt `data-pos` (0 vorn, 2 hinten) — kartei.js dreht die Werte
+   weiter, das Stylesheet macht daraus die Lage. Die Neigung zum Zeiger
+   (bewegung.js) sitzt auf dem Stapel, nicht auf .kartei, weil dort schon
+   die Einblende-Bewegung liegt. */
+.kartei-stapel {
+  position: relative; display: grid;
+  transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 500ms var(--kurve-sheet);
+}
+.kartei-stapel.folgt { transition: transform 120ms linear; }
 .kartei-blatt {
+  grid-area: 1 / 1;
   position: relative;
   background: var(--papier);
   border-radius: 4px 12px 12px 12px;
@@ -625,20 +602,65 @@ details:not([open]) > .menue-blatt { display: none; }
     0 1px 0 rgba(255,255,255,.7) inset,
     0 2px 3px rgba(14,22,17,.18),
     0 38px 70px -28px rgba(14,22,17,.75);
+  transition: transform 650ms var(--kurve-sheet), background-color 400ms var(--kurve-weich);
 }
-/* Die zweite Karte dahinter: gibt dem Ganzen den Kasten, aus dem sie kommt. */
-.kartei-blatt-hinten {
-  position: absolute; inset: 0;
-  background: var(--papier-hinten);
-  transform: rotate(5deg) translate(18px, 10px);
-  box-shadow: 0 30px 60px -30px rgba(14,22,17,.7);
+/* Karten dahinter: dunkleres Papier, der Inhalt tritt zurueck, nur der
+   Reiter schaut heraus — jede Karte hat ihren an anderer Stelle, wie im
+   echten Kasten. */
+.kartei-blatt[data-pos="0"] { z-index: 3; }
+.kartei-blatt[data-pos="1"] { z-index: 2; background-color: var(--papier-hinten); transform: rotate(5deg) translate(18px, 10px); }
+.kartei-blatt[data-pos="2"] { z-index: 1; background-color: #E2D6BD; transform: rotate(-3deg) translate(-14px, 4px); }
+.kartei-blatt:not([data-pos="0"]) > :not(.kartei-reiter) { opacity: 0; }
+.kartei-blatt > * { transition: opacity 300ms var(--kurve-weich); }
+.kartei-blatt:not([data-pos="0"]) .kartei-reiter { background-color: inherit; }
+/* Die Reiterstelle gehoert zur Lage im Stapel, nicht zur Karte: so
+   ueberdecken sich die drei in keiner Reihenfolge, und keiner verschwindet
+   unter dem Stempel. Beim Umstecken rutscht der Reiter an seinen neuen
+   Platz — wie beim Umsortieren im Kasten. */
+.kartei-blatt[data-pos="1"] .kartei-reiter { left: 17%; }
+.kartei-blatt[data-pos="2"] .kartei-reiter { left: 60%; }
+/* Beim Blaettern wird die vordere Karte erst abgehoben und nach rechts
+   gezogen, dann nach hinten gesteckt. */
+.kartei-blatt.hebt { transform: translate(38%, -10%) rotate(14deg); transition-duration: 280ms; }
+
+/* Lichtreflex auf dem Papier, folgt dem Zeiger. */
+.kartei-blatt[data-pos="0"]::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255,255,255,.7), rgba(255,255,255,0) 55%);
+  opacity: var(--glanz, 0);
+  transition: opacity 400ms var(--kurve-weich);
 }
-.kartei-blatt-hinten::before {
-  content: ""; position: absolute; top: -20px; right: 30px;
-  width: 92px; height: 22px;
-  background: inherit; border-radius: 8px 8px 0 0;
+
+/* Die ganze Karte ist die Schaltflaeche. Unsichtbar, aber mit Rahmen, sobald
+   die Tastatur sie erreicht. */
+.kartei-weiter {
+  position: absolute; inset: -26px -10px -10px; z-index: 5;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  border-radius: 14px;
 }
+.kartei-weiter:focus-visible { outline: 2px solid #FBF7F1; outline-offset: 4px; }
+.kartei-hinweis {
+  display: none;
+  margin-top: 26px; text-align: center;
+  font-family: "Instrument Serif", Georgia, serif; font-style: italic;
+  font-size: 1.1rem; color: rgba(251,247,241,.78);
+  transform: rotate(2.5deg);  /* gleicht die Schraeglage der Karte aus */
+}
+.js .kartei-hinweis { display: block; }
+.kartei-hinweis::before { content: "↺ "; font-style: normal; }
+.hinweis-maus { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .hinweis-maus { display: inline; }
+  .hinweis-finger { display: none; }
+}
+
+.unsichtbar {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
 .kartei-reiter {
+  transition: left 650ms var(--kurve-sheet), background-color 400ms var(--kurve-weich);
   position: absolute; top: -24px; left: 0;
   height: 26px; padding: 0 16px;
   display: inline-flex; align-items: center;
@@ -668,9 +690,15 @@ details:not([open]) > .menue-blatt { display: none; }
 .kartei-saldo { color: var(--kartei-stempel); font-weight: 600 !important; }
 .punkt { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
 .punkt-weizen { background: #26392F; }
+.punkt-gerste { background: #B98A2E; }
+.punkt-raps   { background: #781F19; }
+.punkt-hafer  { background: #8A6446; }
+.punkt-mais   { background: #6E9578; }
 
 /* Der Stempel ragt ueber die Ecke — wie echt gestempelt, nie ganz gerade. */
+.kartei-blatt:not([data-pos="0"]) .kartei-stempel { transform: rotate(9deg) scale(1.4); }
 .kartei-stempel {
+  transition: transform 300ms var(--kurve-sheet), opacity 300ms var(--kurve-weich);
   position: absolute; top: -18px; right: -22px;
   padding: 7px 11px 6px;
   border: 2px solid var(--kartei-stempel); border-radius: 7px;
@@ -690,14 +718,13 @@ details:not([open]) > .menue-blatt { display: none; }
 @media (max-width: 1000px) {
   .held-huelle { grid-template-columns: minmax(0, 1fr); gap: 44px; }
   /* Mit der Karte ist der Held hoeher als das Fenster und der Text rutscht
-     nach oben — ohne die 36 px klebte die Augenbraue am Beta-Balken. */
-  .held-bild { padding-top: calc(var(--kopf) + var(--balken) + 36px); padding-bottom: 56px; }
+     nach oben — ohne die 48 px klebte die Augenbraue an der Kopfleiste. */
+  .held-bild { padding-top: calc(var(--kopf) + 48px); padding-bottom: 56px; }
   .kartei { width: min(340px, calc(100% - 28px)); margin-top: 0; justify-self: start; }
   .kartei-blatt { padding: 22px 20px 18px; }
   .kartei-name { font-size: 1.75rem; }
   .kartei-zeilen > div { padding: 7px 0 6px; font-size: .86rem; }
   .kartei-stempel { right: -10px; }
-  .kartei-blatt-hinten { transform: rotate(4deg) translate(10px, 8px); }
 }
 
 /* ---------------------------------------------------------------------------
@@ -822,6 +849,159 @@ details:not([open]) > .menue-blatt { display: none; }
 figure.schirm-mit-text { margin: 0; }
 .schirm-bildunterschrift {
   margin-top: 12px; font-size: .85rem; color: var(--ink-still);
+}
+
+/* ---------------------------------------------------------------------------
+   Buehne — das Bildschirmfoto bekommt einen Tisch
+   ---------------------------------------------------------------------------
+   Nackt auf Papier sahen die Aufnahmen aus wie eingeklebt. Jetzt liegt jede
+   auf einer Flaeche in ihrer Kulturfarbe (--ton), mit feinen Fahrgassen
+   schraeg darueber, im Fenster der Anwendung — und mit einer Notiz in
+   Handschrift, die auf das zeigt, worauf es ankommt.
+   --------------------------------------------------------------------------- */
+
+.buehne {
+  --ton: var(--kultur-weizen);
+  position: relative; isolation: isolate;
+  padding: clamp(18px, 3.4vw, 44px);
+  border-radius: var(--r-l);
+  background:
+    radial-gradient(90% 80% at 15% 0%, color-mix(in srgb, var(--ton) 22%, transparent), transparent 70%),
+    radial-gradient(70% 70% at 100% 100%, color-mix(in srgb, var(--ton) 16%, transparent), transparent 70%),
+    repeating-linear-gradient(118deg, color-mix(in srgb, var(--ton) 11%, transparent) 0 1px, transparent 1px 24px),
+    color-mix(in srgb, var(--ton) 7%, var(--grund));
+  border: 1px solid color-mix(in srgb, var(--ton) 16%, transparent);
+  perspective: 1600px;
+}
+.buehne-kipp {
+  transform-origin: 50% 30%;
+  transition: transform 500ms var(--kurve-sheet);
+  will-change: transform;
+}
+.buehne-kipp.folgt { transition: transform 120ms linear; }
+.buehne .schirm { position: relative; box-shadow: 0 40px 80px -36px rgba(14,22,17,.55), 0 2px 6px rgba(14,22,17,.08); }
+
+/* Fensterleiste: drei Punkte in den Kulturfarben statt in Ampelfarben, und
+   die Adresse, unter der die Ansicht in der Anwendung liegt. */
+/* Feste helle Werte statt Tokens: die Aufnahmen sind hell, auch im
+   Dunkelmodus und im dunklen Block. Mit Tokens stand die Adresse dort hell
+   auf hell und war weg. */
+.schirm-leiste {
+  display: flex; align-items: center; gap: 7px;
+  height: 36px; padding: 0 14px;
+  background: #F3EEE5;
+  border-bottom: 1px solid rgba(38,57,47,.09);
+}
+.schirm-leiste i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.schirm-leiste i:nth-child(1) { background: var(--kultur-raps); }
+.schirm-leiste i:nth-child(2) { background: var(--kultur-gerste); }
+.schirm-leiste i:nth-child(3) { background: var(--kultur-mais); }
+.schirm-leiste span {
+  margin-inline: auto; padding: 3px 14px; border-radius: var(--r-pille);
+  background: rgba(38,57,47,.06); color: rgba(38,57,47,.66);
+  font-size: .72rem; letter-spacing: .01em;
+  transform: translateX(-20px);  /* optisch mittig trotz der Punkte links */
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;
+}
+
+/* Notiz: ein Zettel mit Handschrift und einem Pfeil, der sich beim
+   Hereinrollen zeichnet. */
+.notiz {
+  position: absolute; z-index: 3; margin: 0;
+  padding: 10px 16px 11px;
+  background: #FFFCF5; color: #26392F;
+  border-radius: 3px;
+  font-family: "Instrument Serif", Georgia, serif; font-style: italic;
+  font-size: 1.28rem; line-height: 1.12;
+  box-shadow: 0 14px 28px -14px rgba(14,22,17,.55), 0 1px 2px rgba(14,22,17,.12);
+  transform: rotate(var(--dreh, -3deg));
+  /* Haengt am Klebestreifen: dort ist der Drehpunkt, wenn der Wind kommt
+     (bewegung.js setzt dafuer `rotate` und `translate`, die sich mit dem
+     `transform` der Einblendung vertragen, statt es zu ueberschreiben). */
+  transform-origin: 50% -4px;
+  pointer-events: none;
+}
+/* Klebestreifen oben */
+.notiz::before {
+  content: ""; position: absolute; top: -9px; left: 50%; width: 58px; height: 18px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: rgba(242,217,162,.72);
+  box-shadow: 0 1px 2px rgba(14,22,17,.12);
+}
+.notiz-pfeil {
+  position: absolute; width: 72px; height: 54px; overflow: visible;
+  fill: none; stroke: #F2D9A2; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 1px 1px rgba(14,22,17,.5));
+}
+.notiz-pfeil path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+/* Lage je Aufnahme — in Prozent der Buehne, Pfeil jeweils zur Stelle hin. */
+/* Der Pfeil im SVG laeuft von rechts oben nach links unten; gedreht zeigt
+   er in jede Richtung. Jede Lage einzeln am Bildschirmfoto nachgemessen. */
+.notiz-karte  { left: 27%; bottom: 17%; --dreh: -3deg; }
+.notiz-karte .notiz-pfeil  { left: -76px; top: 2px; transform: rotate(32deg); }
+.notiz-umriss { right: 27%; bottom: 13%; --dreh: 2.5deg; }
+.notiz-umriss .notiz-pfeil { right: -150px; top: 4px; width: 140px; height: 46px; transform: rotate(180deg); }
+.notiz-schlag { right: 4%; top: 46%; --dreh: 3deg; }
+.notiz-schlag .notiz-pfeil { left: -84px; top: -4px; width: 78px; height: 40px; transform: rotate(18deg); }
+.notiz-export { right: 3%; top: 49%; --dreh: -2deg; }
+.notiz-export .notiz-pfeil { left: -80px; top: 12px; transform: rotate(30deg); }
+
+/* Punkte auf der Karte: ein pulsierender Ring auf dem Schlag, darueber beim
+   Zeigen ein Kaertchen mit Name und Kultur. */
+.ziel {
+  position: absolute; left: var(--x); top: var(--y); z-index: 2;
+  width: 44px; height: 44px; margin: -22px 0 0 -22px;
+  border: 0; padding: 0; background: none; cursor: pointer;
+  border-radius: 50%;
+}
+.ziel::before, .ziel::after {
+  content: ""; position: absolute; inset: 13px; border-radius: 50%;
+}
+.ziel::before { background: #FBF7F1; box-shadow: 0 0 0 4px var(--farbe), 0 4px 10px rgba(14,22,17,.5); inset: 16px; }
+.ziel::after { border: 2px solid #FBF7F1; animation: ziel-puls 2.4s var(--kurve-weich) infinite; }
+@keyframes ziel-puls {
+  0%   { transform: scale(.6); opacity: .9; }
+  70%  { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.ziel-karte {
+  position: absolute; left: 50%; bottom: calc(100% + 4px);
+  display: flex; flex-direction: column; gap: 2px; align-items: flex-start;
+  padding: 9px 14px 10px; border-radius: 4px 10px 10px 10px;
+  background: #FFFCF5; color: #26392F; white-space: nowrap; text-align: left;
+  box-shadow: 0 18px 30px -14px rgba(14,22,17,.6);
+  font-size: .8rem;
+  opacity: 0; transform: translate(-50%, 8px) scale(.96); transform-origin: bottom center;
+  transition: opacity 220ms var(--kurve-weich), transform 320ms var(--kurve-sheet);
+  pointer-events: none;
+}
+.ziel-karte b {
+  font-family: "Instrument Serif", Georgia, serif; font-style: italic; font-weight: 400;
+  font-size: 1.35rem; line-height: 1;
+}
+.ziel-karte span { display: inline-flex; align-items: center; gap: 6px; color: rgba(38,57,47,.78); }
+.ziel:hover .ziel-karte, .ziel:focus-visible .ziel-karte, .ziel.offen .ziel-karte {
+  opacity: 1; transform: translate(-50%, 0) scale(1);
+}
+.ziel:focus-visible { outline: 2px solid #FBF7F1; outline-offset: 0; }
+/* Unter dem Zeiger ruht der Puls — ein Ring, der unter der Maus weiter
+   pumpt, wirkt nervoes. */
+.ziel:hover::after, .ziel.offen::after { animation-play-state: paused; opacity: 0; }
+
+/* Auf dem Handy ist die Aufnahme zu klein, um einen Zettel darauf zu kleben.
+   Dort haengt er unter ihr, halb ueber der Kante, ohne Pfeil — und kann
+   trotzdem im Wind wackeln. */
+@media (max-width: 760px) {
+  .notiz {
+    position: relative; inset: auto;
+    display: table; margin: -20px 0 0 12px;
+    font-size: 1.08rem; padding: 9px 14px 10px;
+  }
+  .notiz-pfeil { display: none; }
+  .schirm-leiste { height: 28px; }
+  .schirm-leiste i { width: 8px; height: 8px; }
+  .ziel { width: 36px; height: 36px; margin: -18px 0 0 -18px; }
 }
 
 /* ---------------------------------------------------------------------------
@@ -1046,13 +1226,20 @@ figure.schirm-mit-text { margin: 0; }
 @media (prefers-color-scheme: dark) {
   .abschnitt-dunkel {
     background:
-      radial-gradient(120% 90% at 85% 40%, rgba(143,191,162,.10), transparent 60%),
-      #101612;
+      radial-gradient(120% 90% at 85% 40%, rgba(143,191,162,.12), transparent 60%),
+      #1E2C24;
     box-shadow: 0 0 0 1px var(--linie-zart) inset;
   }
 }
 .abschnitt-dunkel .haken li::before {
   --haken-bild: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%238FBFA2' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5 6.2 11.8 13 5'/%3E%3C/svg%3E");
+}
+.abschnitt-dunkel .buehne {
+  background:
+    radial-gradient(80% 80% at 20% 0%, color-mix(in srgb, var(--ton) 26%, transparent), transparent 70%),
+    repeating-linear-gradient(118deg, rgba(251,247,241,.05) 0 1px, transparent 1px 24px),
+    rgba(251,247,241,.03);
+  border-color: rgba(251,247,241,.08);
 }
 .abschnitt-dunkel .schirm {
   border-color: rgba(251,247,241,.14);
@@ -1123,11 +1310,12 @@ figure.schirm-mit-text { margin: 0; }
   /* Diese Liste liest bewegung.js zur Laufzeit aus — sie steht deshalb hier
      und nicht im Skript. Die Regel darunter muss dieselbe Liste tragen;
      beide zusammen aendern. */
-  --blende-ziele: .held-inhalt > *, .kartei, .abschnitt-kopf > *, .raster > *, .schaufenster-text > *, .schirm, .preis-panel, .band > :not(img), .frage, .fuss-raster > *;
+  --blende-ziele: .held-inhalt > *, .kartei, .notiz, .abschnitt-kopf > *, .raster > *, .schaufenster-text > *, .schirm, .preis-panel, .band > :not(img), .frage, .fuss-raster > *;
 }
 
 .js .held-inhalt > *,
 .js .kartei,
+.js .notiz,
 .js .abschnitt-kopf > *,
 .js .raster > *,
 .js .schaufenster-text > *,
@@ -1159,6 +1347,28 @@ figure.schirm-mit-text { margin: 0; }
 .js .kartei { transform: translate3d(0, 40px, 0) rotate(2deg); }
 .js .kartei.ist-da { transform: rotate(-2.5deg) !important; }
 .kartei.ist-blende { transition-duration: 1100ms; }
+
+/* Notizen: werden aufgeklebt, danach zeichnet sich der Pfeil. */
+.js .notiz { transform: translate3d(0, 16px, 0) rotate(calc(var(--dreh) * 3)) scale(.94); }
+.js .notiz.ist-da { transform: rotate(var(--dreh)) !important; }
+.notiz.ist-blende { --verzug: 450ms !important; }
+.js .notiz-pfeil path { stroke-dashoffset: 1; }
+.js .notiz.ist-da .notiz-pfeil path { stroke-dashoffset: 0; transition: stroke-dashoffset 700ms var(--kurve-sheet) 900ms; }
+.js .notiz.ist-da .notiz-pfeil path + path { transition-delay: 1450ms; transition-duration: 300ms; }
+
+/* Kulturstreifen wachsen von links, einer nach dem anderen. */
+.js .kulturstreifen span { transform: scaleX(0); transform-origin: left center; }
+.ist-da .kulturstreifen span, .kulturstreifen.ist-da span {
+  transform: scaleX(1); transition: transform 900ms var(--kurve-sheet);
+}
+.ist-da .kulturstreifen span:nth-child(2), .kulturstreifen.ist-da span:nth-child(2) { transition-delay: 90ms; }
+.ist-da .kulturstreifen span:nth-child(3), .kulturstreifen.ist-da span:nth-child(3) { transition-delay: 180ms; }
+.ist-da .kulturstreifen span:nth-child(4), .kulturstreifen.ist-da span:nth-child(4) { transition-delay: 270ms; }
+.ist-da .kulturstreifen span:nth-child(5), .kulturstreifen.ist-da span:nth-child(5) { transition-delay: 360ms; }
+
+/* Magnetknoepfe: die Verschiebung setzt bewegung.js, zurueck federt es hier. */
+.knopf.magnet { transition: transform 450ms var(--kurve-sheet), background 120ms var(--kurve-weich), border-color 120ms var(--kurve-weich); }
+.knopf.magnet.folgt { transition: transform 100ms linear, background 120ms var(--kurve-weich); }
 /* Auf schmalen Fenstern schaut die Karte unten aus dem ersten Bildschirm —
    dort liegt sie gleich da. Mit Blende blieb die Luecke leer, bis man rollte,
    denn der Beobachter loest erst aus, wenn 12 % Fenster darunter frei sind. */
@@ -1254,6 +1464,10 @@ figure.schirm-mit-text { margin: 0; }
     opacity: 1; transform: none;
   }
   .js .kartei { opacity: 1; transform: rotate(-2.5deg); }
+  .js .notiz { opacity: 1; transform: rotate(var(--dreh)); }
+  .js .notiz-pfeil path { stroke-dashoffset: 0; }
+  .js .kulturstreifen span { transform: none; }
+  .ziel::after { animation: none; opacity: 0; }
   .js .held-bild > img { transform: none; will-change: auto; }
   .frage[open] > .frage-text { animation: none; }
 }
@@ -1269,5 +1483,8 @@ figure.schirm-mit-text { margin: 0; }
   .kopf, .band, .zum-inhalt { display: none; }
   body { background: #fff; color: #000; }
   body::after { display: none; }
+  .notiz, .ziel, .kartei-hinweis, .schirm-leiste { display: none; }
+  .buehne { background: none; border: 0; padding: 0; }
+  .buehne-kipp { transform: none !important; }
   .rechtstext { max-width: none; }
 }

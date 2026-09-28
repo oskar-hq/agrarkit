@@ -47,9 +47,13 @@ als Überschrift, im `<title>`, im Vorschaubild-Titel (`og:title`), als
 
 Drei Dinge geben der Seite ein eigenes Gesicht und gehören zusammen:
 
-- **Die Karteikarte im Held** (`.kartei`). Papier mit blauen Linien, roter
-  Kopflinie, Reiter mit Schlagnummer, Stempel „ENDO‑SH geprüft". Die Werte
-  sind ein Beispiel, kein echter Betrieb. Sie bleibt in beiden Farbmodi
+- **Der Karteikasten im Held** (`.kartei`). Drei Karten mit blauen Linien,
+  roter Kopflinie, Reiter und Stempel „ENDO‑SH geprüft". Namen und Kulturen
+  (Mühlenberg, Langfeld, Domstag) stammen aus dem Bildschirmfoto der Karte,
+  die Zahlen sind ein Beispiel. Antippen blättert (`assets/js/kartei.js`);
+  welche Karte vorn liegt, steht in `data-pos`, die Lage macht das
+  Stylesheet. Die Reiterstelle hängt an der Lage, nicht an der Karte, sonst
+  überdecken sich die Reiter in manchen Reihenfolgen. Sie bleibt in beiden Farbmodi
   Papier. Unter 1000 px rutscht sie unter den Text und schaut unten aus dem
   ersten Bildschirm heraus.
 - **Instrument Serif kursiv** als zweite Stimme, nur für den betonten Teil
@@ -59,6 +63,15 @@ Drei Dinge geben der Seite ein eigenes Gesicht und gehören zusammen:
 - **Ein einziger dunkler Block** (`.abschnitt-dunkel`, derzeit ENDO‑SH). Er
   stellt die Tokens lokal um, alles darin stimmt ohne eigene Regeln. Nicht
   direkt hinter den Held legen, sonst folgen zwei dunkle Flächen aufeinander.
+
+- **Bühnen für die Bildschirmfotos** (`.buehne`). Jede Aufnahme liegt auf
+  einer Fläche in ihrer Kulturfarbe (`--ton`) mit feinen Fahrgassen, in
+  einem Fenster mit Adressleiste — die drei Punkte sind Raps, Gerste, Mais.
+  Dazu je ein **Notizzettel** in Handschrift, dessen Pfeil sich beim
+  Hereinrollen zeichnet. Die Pfeillagen sind je Aufnahme von Hand
+  nachgemessen; wer eine Aufnahme austauscht, muss `.notiz-*` nachziehen.
+- **Punkte auf der Karte** (`.ziel`) sitzen in Prozent der Aufnahme auf
+  echten Schlägen. Mit Maus genügt Zeigen, auf dem Handy öffnet Antippen.
 
 Dazu ein Hauch Papierkorn über der ganzen Seite (`body::after`), nur über die
 Deckkraft, ohne Mischmodus.
@@ -85,7 +98,7 @@ sollten zusammen bleiben:
   auf den Rechtsseiten gibt es kein Bild, dort wäre helle Schrift unlesbar.
 - **`overflow: hidden` auf `.held-bild` muss bleiben.** Das Bild trägt für die
   Parallaxe ein `scale(1.16)` und ragt damit rund 68 px über seinen Rahmen
-  hinaus. Ohne Beschnitt lief es oben über den Beta-Balken und unten als
+  hinaus. Ohne Beschnitt lief es oben über die Kopfleiste und unten als
   heller Grasstreifen in den nächsten Abschnitt.
 
 Achtung beim Prüfen: Wer nur mit `prefers-reduced-motion: reduce`
@@ -101,10 +114,29 @@ die volle Breite, der waagerechte Verlauf hilft also nicht mehr.
 
 ## Bewegung
 
-`assets/js/bewegung.js`, rund 130 Zeilen, keine Abhängigkeiten. Drei Effekte:
-Einblenden beim Hereinrollen mit Staffelung, sanfte Parallaxe im Held, und
-eine Kopfleiste, die beim Rollen eine Kante bekommt. Dazu klappen die Fragen
-weich auf.
+`assets/js/bewegung.js`, keine Abhängigkeiten. Einblenden beim Hereinrollen
+mit Staffelung, sanfte Parallaxe im Held, eine Kopfleiste, die beim Rollen
+eine Kante bekommt, und die Kartenaufnahme, die schräg liegt und sich beim
+Rollen aufrichtet. Dazu klappen die Fragen weich auf.
+
+**Nur mit echter Maus** (`hover: hover` und `pointer: fine`) kommen dazu:
+ein warmes Abendlicht, das dem Zeiger über das Heldfoto folgt; die
+Karteikarte neigt sich zum Zeiger, mit wanderndem Lichtreflex; die
+Bildschirmfotos neigen sich um höchstens 3 Grad; die großen Hauptknöpfe
+ziehen sich bis zu 6 px zum Zeiger. Jede Zeigerbewegung wird auf ein Bild
+pro Bildschirmaktualisierung gebündelt.
+
+**Wind** (auch auf dem Handy): Die Notizzettel hängen an ihrem Klebestreifen
+und schwingen wie gedämpfte Pendel. Schnelles Wischen quer mit Maus oder
+Finger stößt sie an (Zettel nahe am Zeiger stärker), schnelles Rollen lässt
+sie flattern. Langsame Bewegungen tun nichts. Gesetzt werden die CSS-
+Eigenschaften `rotate` und `translate`, damit sich das nicht mit dem
+`transform` der Einblendung beißt; die Schleife läuft nur, solange sich
+etwas bewegt. Auf dem Handy hängen die Zettel unter der Aufnahme statt
+darauf, ohne Pfeil.
+
+`assets/js/kartei.js` ist keine Bewegung, sondern Funktion (Blättern,
+Kartenpunkte antippen) und läuft deshalb auch im ruhigen Modus.
 
 Alles läuft auf `--kurve-sheet` — derselben Kurve, die die Anwendung für ihre
 Sheets benutzt. Bewegt werden ausschließlich `opacity` und `transform`, damit
@@ -182,19 +214,11 @@ Ertrag. Die Versionsnummer steht in der Anwendung, wo sie hingehört.
 
 Beta steht an zwei Stellen, mehr braucht es nicht:
 
-- als **Balken direkt unter der Navigation**, auf jeder Seite. Er ist
-  ausdrücklich **nicht** `sticky`: wer die Seite öffnet, sieht ihn zuerst; wer
-  weiterliest, hat ihn nicht dauerhaft vor der Nase. Die klebende Kopfleiste
-  bleibt, der Balken verschwindet unter ihr.
-- als Marke in der Fußzeile jeder Seite.
+- im **Preisabschnitt** als „Beta-Zugang, 0 €“,
+- als **Marke in der Fußzeile** jeder Seite.
 
-Auf der Startseite liegt der Balken **im Held** (`position: absolute; top:
-var(--kopf)`) und damit auf dem Bild; auf den übrigen Seiten steht er im
-normalen Fluss hinter der Kopfleiste. Beides ergibt dieselbe Bewegung.
-
-Der kürzere Satz auf schmalen Fenstern bleibt — nicht mehr aus Rechengründen,
-sondern damit der Balken dort einzeilig bleibt und nicht ein Drittel des
-ersten Bildschirms frisst.
+Einen Balken unter der Navigation gab es früher; er ist entfallen, damit
+der erste Bildschirm dem Slogan gehört.
 
 Die Farbe ist der Ockerton der Wintergerste aus der Kartenlegende —
 **bewusst nicht Rot**: Rot ist in der Anwendung für Storno, Löschen und
