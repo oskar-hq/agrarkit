@@ -47,9 +47,13 @@ als Überschrift, im `<title>`, im Vorschaubild-Titel (`og:title`), als
 
 Drei Dinge geben der Seite ein eigenes Gesicht und gehören zusammen:
 
-- **Die Karteikarte im Held** (`.kartei`). Papier mit blauen Linien, roter
-  Kopflinie, Reiter mit Schlagnummer, Stempel „ENDO‑SH geprüft". Die Werte
-  sind ein Beispiel, kein echter Betrieb. Sie bleibt in beiden Farbmodi
+- **Der Karteikasten im Held** (`.kartei`). Drei Karten mit blauen Linien,
+  roter Kopflinie, Reiter und Stempel „ENDO‑SH geprüft". Namen und Kulturen
+  (Mühlenberg, Langfeld, Domstag) stammen aus dem Bildschirmfoto der Karte,
+  die Zahlen sind ein Beispiel. Antippen blättert (`assets/js/kartei.js`);
+  welche Karte vorn liegt, steht in `data-pos`, die Lage macht das
+  Stylesheet. Die Reiterstelle hängt an der Lage, nicht an der Karte, sonst
+  überdecken sich die Reiter in manchen Reihenfolgen. Sie bleibt in beiden Farbmodi
   Papier. Unter 1000 px rutscht sie unter den Text und schaut unten aus dem
   ersten Bildschirm heraus.
 - **Instrument Serif kursiv** als zweite Stimme, nur für den betonten Teil
@@ -59,6 +63,15 @@ Drei Dinge geben der Seite ein eigenes Gesicht und gehören zusammen:
 - **Ein einziger dunkler Block** (`.abschnitt-dunkel`, derzeit ENDO‑SH). Er
   stellt die Tokens lokal um, alles darin stimmt ohne eigene Regeln. Nicht
   direkt hinter den Held legen, sonst folgen zwei dunkle Flächen aufeinander.
+
+- **Bühnen für die Bildschirmfotos** (`.buehne`). Jede Aufnahme liegt auf
+  einer Fläche in ihrer Kulturfarbe (`--ton`) mit feinen Fahrgassen, in
+  einem Fenster mit Adressleiste — die drei Punkte sind Raps, Gerste, Mais.
+  Dazu je ein **Notizzettel** in Handschrift, dessen Pfeil sich beim
+  Hereinrollen zeichnet. Die Pfeillagen sind je Aufnahme von Hand
+  nachgemessen; wer eine Aufnahme austauscht, muss `.notiz-*` nachziehen.
+- **Punkte auf der Karte** (`.ziel`) sitzen in Prozent der Aufnahme auf
+  echten Schlägen. Mit Maus genügt Zeigen, auf dem Handy öffnet Antippen.
 
 Dazu ein Hauch Papierkorn über der ganzen Seite (`body::after`), nur über die
 Deckkraft, ohne Mischmodus.
@@ -101,10 +114,20 @@ die volle Breite, der waagerechte Verlauf hilft also nicht mehr.
 
 ## Bewegung
 
-`assets/js/bewegung.js`, rund 130 Zeilen, keine Abhängigkeiten. Drei Effekte:
-Einblenden beim Hereinrollen mit Staffelung, sanfte Parallaxe im Held, und
-eine Kopfleiste, die beim Rollen eine Kante bekommt. Dazu klappen die Fragen
-weich auf.
+`assets/js/bewegung.js`, keine Abhängigkeiten. Einblenden beim Hereinrollen
+mit Staffelung, sanfte Parallaxe im Held, eine Kopfleiste, die beim Rollen
+eine Kante bekommt, und die Kartenaufnahme, die schräg liegt und sich beim
+Rollen aufrichtet. Dazu klappen die Fragen weich auf.
+
+**Nur mit echter Maus** (`hover: hover` und `pointer: fine`) kommen dazu:
+ein warmes Abendlicht, das dem Zeiger über das Heldfoto folgt; die
+Karteikarte neigt sich zum Zeiger, mit wanderndem Lichtreflex; die
+Bildschirmfotos neigen sich um höchstens 3 Grad; die großen Hauptknöpfe
+ziehen sich bis zu 6 px zum Zeiger. Jede Zeigerbewegung wird auf ein Bild
+pro Bildschirmaktualisierung gebündelt.
+
+`assets/js/kartei.js` ist keine Bewegung, sondern Funktion (Blättern,
+Kartenpunkte antippen) und läuft deshalb auch im ruhigen Modus.
 
 Alles läuft auf `--kurve-sheet` — derselben Kurve, die die Anwendung für ihre
 Sheets benutzt. Bewegt werden ausschließlich `opacity` und `transform`, damit

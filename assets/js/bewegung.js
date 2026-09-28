@@ -1,10 +1,16 @@
 /* ===========================================================================
    Agrarkit — Bewegung
 
-   Drei Dinge, mehr nicht:
    1. Einblenden beim Hereinrollen, gestaffelt innerhalb einer Gruppe.
    2. Sanfte Parallaxe im Held.
    3. Die Kopfleiste bekommt eine Kante, sobald die Seite nicht mehr oben steht.
+   4. Die Kartenaufnahme liegt schraeg und richtet sich beim Rollen auf.
+   5. Nur mit Maus: Abendlicht im Held, Karteikarte und Aufnahmen neigen
+      sich zum Zeiger, Hauptknoepfe ziehen sich ein Stueck zu ihm hin.
+
+   Bewegt werden nur `transform`, `opacity` und CSS-Variablen, die in
+   genau diese beiden muenden. Jede Zeigerbewegung wird auf ein Bild pro
+   Bildschirmaktualisierung gebuendelt.
 
    Die Klasse `js` setzt das Vorspann-Skript im <head> — nicht diese Datei.
    Sonst blitzt der Inhalt kurz auf, bevor die Blende zugeht.
@@ -115,6 +121,125 @@
       addEventListener("scroll", anfordern, { passive: true });
       addEventListener("resize", anfordern, { passive: true });
       anfordern();
+    }
+
+    /* --- Kartenaufnahme richtet sich auf --------------------------------
+       Liegt anfangs wie ein Blatt auf dem Tisch (14 Grad gekippt) und steht
+       gerade, sobald ihre Mitte das obere Fensterdrittel erreicht. */
+    const kippKarte = document.querySelector(".buehne-karte .buehne-kipp");
+    const kipp = new Map();   // Element -> { rx, ry, kx }
+    const setzeKipp = (el) => {
+      const z = kipp.get(el) || { rx: 0, ry: 0, kx: 0 };
+      const skala = 1 - z.kx * 0.05;
+      el.style.transform =
+        `rotateX(${(z.kx * 14 + z.rx).toFixed(2)}deg) rotateY(${z.ry.toFixed(2)}deg) scale(${skala.toFixed(3)})`;
+    };
+    if (kippKarte) {
+      kipp.set(kippKarte, { rx: 0, ry: 0, kx: 1 });
+      let angemeldet = false;
+      const rechnen = () => {
+        angemeldet = false;
+        const r = kippKarte.getBoundingClientRect();
+        const mitte = r.top + r.height / 2;
+        // 1 wenn die Mitte am unteren Fensterrand steht, 0 ab 55 % Hoehe.
+        const t = Math.min(1, Math.max(0, (mitte - innerHeight * 0.55) / (innerHeight * 0.45)));
+        kipp.get(kippKarte).kx = t;
+        setzeKipp(kippKarte);
+      };
+      const anfordern = () => { if (!angemeldet) { angemeldet = true; requestAnimationFrame(rechnen); } };
+      addEventListener("scroll", anfordern, { passive: true });
+      addEventListener("resize", anfordern, { passive: true });
+      rechnen();
+    }
+
+    /* --- Alles Weitere nur mit einer echten Maus -------------------------
+       Auf dem Handy gibt es keinen Zeiger, dem etwas folgen koennte, und ein
+       Finger, der eine Karte kippt, waere nur im Weg. */
+    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    const begrenzen = (w, g) => Math.max(-g, Math.min(g, w));
+
+    // Abendlicht und Karteikarte haengen am selben Zeiger im Held.
+    const held = document.querySelector(".held-bild");
+    const stapel = document.querySelector(".kartei-stapel");
+    if (held) {
+      let letztes = null, angemeldet = false;
+      const zeichnen = () => {
+        angemeldet = false;
+        if (!letztes) return;
+        const h = held.getBoundingClientRect();
+        held.style.setProperty("--mx", `${letztes.clientX - h.left}px`);
+        held.style.setProperty("--my", `${letztes.clientY - h.top}px`);
+        if (stapel && stapel.offsetParent) {
+          const k = stapel.getBoundingClientRect();
+          const dx = (letztes.clientX - (k.left + k.width / 2)) / (k.width / 2);
+          const dy = (letztes.clientY - (k.top + k.height / 2)) / (k.height / 2);
+          // Naeher an der Karte kippt sie staerker; von weit weg nur ein Hauch.
+          const naehe = Math.max(0.25, 1 - Math.hypot(dx, dy) / 5);
+          stapel.style.setProperty("--ry", `${(begrenzen(dx, 1.4) * 9 * naehe).toFixed(2)}deg`);
+          stapel.style.setProperty("--rx", `${(-begrenzen(dy, 1.4) * 7 * naehe).toFixed(2)}deg`);
+          stapel.style.setProperty("--gx", `${(50 + begrenzen(dx, 1.2) * 45).toFixed(1)}%`);
+          stapel.style.setProperty("--gy", `${(50 + begrenzen(dy, 1.2) * 45).toFixed(1)}%`);
+          stapel.style.setProperty("--glanz", (0.18 + naehe * 0.5).toFixed(2));
+        }
+      };
+      held.addEventListener("pointermove", (e) => {
+        letztes = e;
+        held.classList.add("hat-zeiger");
+        stapel?.classList.add("folgt");
+        if (!angemeldet) { angemeldet = true; requestAnimationFrame(zeichnen); }
+      }, { passive: true });
+      held.addEventListener("pointerleave", () => {
+        letztes = null;
+        held.classList.remove("hat-zeiger");
+        if (stapel) {
+          stapel.classList.remove("folgt");
+          for (const v of ["--rx", "--ry", "--glanz"]) stapel.style.removeProperty(v);
+        }
+      });
+    }
+
+    // Aufnahmen neigen sich leicht zum Zeiger — hoechstens 3 Grad, damit
+    // man die Tabelle noch lesen kann.
+    for (const buehne of document.querySelectorAll(".buehne")) {
+      const el = buehne.querySelector(".buehne-kipp");
+      if (!el) continue;
+      if (!kipp.has(el)) kipp.set(el, { rx: 0, ry: 0, kx: 0 });
+      let letztes = null, angemeldet = false;
+      const zeichnen = () => {
+        angemeldet = false;
+        if (!letztes) return;
+        const r = buehne.getBoundingClientRect();
+        const z = kipp.get(el);
+        z.ry = begrenzen((letztes.clientX - r.left) / r.width - 0.5, 0.5) * 6;
+        z.rx = -begrenzen((letztes.clientY - r.top) / r.height - 0.5, 0.5) * 4;
+        setzeKipp(el);
+      };
+      buehne.addEventListener("pointermove", (e) => {
+        letztes = e; el.classList.add("folgt");
+        if (!angemeldet) { angemeldet = true; requestAnimationFrame(zeichnen); }
+      }, { passive: true });
+      buehne.addEventListener("pointerleave", () => {
+        letztes = null; el.classList.remove("folgt");
+        const z = kipp.get(el); z.rx = 0; z.ry = 0; setzeKipp(el);
+      });
+    }
+
+    // Magnetknoepfe: die grossen Hauptknoepfe ziehen sich bis zu 6 px zum
+    // Zeiger. Nur diese — jeder Knopf, der wandert, waere Unruhe.
+    for (const k of document.querySelectorAll(".knopf-primaer.knopf-gross")) {
+      k.classList.add("magnet");
+      k.addEventListener("pointermove", (e) => {
+        const r = k.getBoundingClientRect();
+        const x = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+        const y = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+        k.classList.add("folgt");
+        k.style.transform = `translate(${(x * 6).toFixed(1)}px, ${(y * 4).toFixed(1)}px)`;
+      }, { passive: true });
+      k.addEventListener("pointerleave", () => {
+        k.classList.remove("folgt");
+        k.style.removeProperty("transform");
+      });
     }
   } catch (fehler) {
     // Lieber ohne Bewegung als mit unsichtbarem Inhalt.

@@ -111,6 +111,7 @@
              sizes="100vw"
              width="1920" height="1179" fetchpriority="high"
              alt="Schlepper mit Pflug auf einem Acker bei tiefstehender Sonne">
+        <div class="held-licht" aria-hidden="true"></div>
 
         <p class="beta-balken">
           <span class="huelle beta-balken-innen">
@@ -132,27 +133,64 @@
           </div>
         </div>
 
-        <!-- Karteikarte: das Leitbild der Seite. Die Werte sind ein Beispiel,
-             kein echter Betrieb; fuer Vorlesewerkzeuge deshalb als ein Bild
-             mit einer Beschreibung statt als Tabelle. -->
-        <div class="kartei" role="img" aria-label="Beispiel einer Karteikarte in Agrarkit: Schlag 12, Achterkoppel, Winterweizen, 8,42 Hektar Nutzfläche, Stickstoff-Saldo plus 3 Kilogramm je Hektar, ENDO-SH geprüft">
-          <div class="kartei-blatt kartei-blatt-hinten" aria-hidden="true"></div>
-          <div class="kartei-blatt" aria-hidden="true">
-            <span class="kartei-reiter">Schlag 12</span>
-            <div class="kartei-kopf">
-              <span class="kartei-name">Achterkoppel</span>
-              <span class="kartei-jahr zahl">Ernte 2026</span>
+        <!-- Karteikasten: das Leitbild der Seite. Drei Beispielkarten, die
+             Namen und Kulturen stammen aus dem Bildschirmfoto der Karte
+             weiter unten, die Zahlen sind ein Beispiel. Antippen blaettert
+             (kartei.js); ohne Skript bleibt die vorderste Karte stehen. -->
+        <div class="kartei">
+          <div class="kartei-stapel">
+            <div class="kartei-blatt" data-pos="0">
+              <span class="kartei-reiter">Schlag 12</span>
+              <div class="kartei-kopf">
+                <span class="kartei-name">Mühlenberg</span>
+                <span class="kartei-jahr zahl">Ernte 2026</span>
+              </div>
+              <dl class="kartei-zeilen">
+                <div><dt>Kultur</dt><dd><i class="punkt punkt-gerste"></i>Wintergerste</dd></div>
+                <div><dt>Nutzfläche</dt><dd class="zahl">17,66 ha</dd></div>
+                <div><dt>Knicks</dt><dd class="zahl">− 0,40 ha</dd></div>
+                <div><dt>Boden · AZ</dt><dd class="zahl">lS · 48</dd></div>
+                <div><dt>N-Bedarf</dt><dd class="zahl">230 kg/ha</dd></div>
+                <div><dt>N-Saldo</dt><dd class="zahl kartei-saldo">29 kg/ha</dd></div>
+              </dl>
+              <span class="kartei-stempel">ENDO&#8209;SH<br>geprüft</span>
             </div>
-            <dl class="kartei-zeilen">
-              <div><dt>Kultur</dt><dd><i class="punkt punkt-weizen"></i>Winterweizen</dd></div>
-              <div><dt>Nutzfläche</dt><dd class="zahl">8,42 ha</dd></div>
-              <div><dt>Knicks</dt><dd class="zahl">− 0,31 ha</dd></div>
-              <div><dt>Boden · AZ</dt><dd class="zahl">lS · 52</dd></div>
-              <div><dt>N-Bedarf</dt><dd class="zahl">196 kg/ha</dd></div>
-              <div><dt>N-Saldo</dt><dd class="zahl kartei-saldo">+ 3 kg/ha</dd></div>
-            </dl>
-            <span class="kartei-stempel">ENDO&#8209;SH<br>geprüft</span>
+            <div class="kartei-blatt" data-pos="1" aria-hidden="true">
+              <span class="kartei-reiter">Schlag 4</span>
+              <div class="kartei-kopf">
+                <span class="kartei-name">Langfeld</span>
+                <span class="kartei-jahr zahl">Ernte 2026</span>
+              </div>
+              <dl class="kartei-zeilen">
+                <div><dt>Kultur</dt><dd><i class="punkt punkt-raps"></i>Raps</dd></div>
+                <div><dt>Nutzfläche</dt><dd class="zahl">12,84 ha</dd></div>
+                <div><dt>Knicks</dt><dd class="zahl">− 0,22 ha</dd></div>
+                <div><dt>Boden · AZ</dt><dd class="zahl">sL · 55</dd></div>
+                <div><dt>N-Bedarf</dt><dd class="zahl">200 kg/ha</dd></div>
+                <div><dt>N-Saldo</dt><dd class="zahl kartei-saldo">12 kg/ha</dd></div>
+              </dl>
+              <span class="kartei-stempel">ENDO&#8209;SH<br>geprüft</span>
+            </div>
+            <div class="kartei-blatt" data-pos="2" aria-hidden="true">
+              <span class="kartei-reiter">Schlag 9</span>
+              <div class="kartei-kopf">
+                <span class="kartei-name">Domstag</span>
+                <span class="kartei-jahr zahl">Ernte 2026</span>
+              </div>
+              <dl class="kartei-zeilen">
+                <div><dt>Kultur</dt><dd><i class="punkt punkt-weizen"></i>Winterweizen A/B</dd></div>
+                <div><dt>Nutzfläche</dt><dd class="zahl">8,42 ha</dd></div>
+                <div><dt>Knicks</dt><dd class="zahl">− 0,31 ha</dd></div>
+                <div><dt>Boden · AZ</dt><dd class="zahl">lS · 52</dd></div>
+                <div><dt>N-Bedarf</dt><dd class="zahl">196 kg/ha</dd></div>
+                <div><dt>N-Saldo</dt><dd class="zahl kartei-saldo">3 kg/ha</dd></div>
+              </dl>
+              <span class="kartei-stempel">ENDO&#8209;SH<br>geprüft</span>
+            </div>
+            <button type="button" class="kartei-weiter"><span class="unsichtbar">Nächste Beispielkarte zeigen</span></button>
           </div>
+          <p class="kartei-hinweis" aria-hidden="true"><span class="hinweis-maus">Klicken zum Blättern</span><span class="hinweis-finger">Antippen zum Blättern</span></p>
+          <p class="unsichtbar" aria-live="polite" data-kartei-ansage></p>
         </div>
         </div>
       </div>
@@ -274,13 +312,33 @@
         </p>
       </div>
 
+      <div class="buehne buehne-karte" style="--ton: var(--kultur-weizen)">
+      <div class="buehne-kipp">
       <figure class="schirm">
+        <div class="schirm-leiste" aria-hidden="true"><i></i><i></i><i></i><span>app.agrarkit.de/schlaege?ansicht=karte</span></div>
         <img src="assets/img/app/karte.webp"
              srcset="assets/img/app/karte-1000.webp 1000w, assets/img/app/karte.webp 1570w"
              sizes="(max-width: 1440px) calc(100vw - 48px), 1392px"
              width="1570" height="878" loading="lazy"
              alt="Kartenansicht in Agrarkit: Schläge über einem Luftbild der Ostseeküste, nach Kultur eingefärbt, mit Flächenlegende unten links">
+        <!-- Punkte auf echten Schlaegen des Bildschirmfotos. Lage in Prozent
+             der Aufnahme, Farbe und Kultur wie in der Legende. -->
+        <button type="button" class="ziel" style="--x: 69.4%; --y: 28.2%; --farbe: var(--kultur-raps)">
+          <span class="unsichtbar">Langfeld</span>
+          <span class="ziel-karte" aria-hidden="true"><b>Langfeld</b><span><i class="punkt punkt-raps"></i>Raps</span></span>
+        </button>
+        <button type="button" class="ziel" style="--x: 69.2%; --y: 39.8%; --farbe: var(--kultur-gerste)">
+          <span class="unsichtbar">Mühlenberg</span>
+          <span class="ziel-karte" aria-hidden="true"><b>Mühlenberg</b><span><i class="punkt punkt-gerste"></i>Wintergerste</span></span>
+        </button>
+        <button type="button" class="ziel" style="--x: 71.9%; --y: 74.4%; --farbe: var(--kultur-weizen)">
+          <span class="unsichtbar">Domstag</span>
+          <span class="ziel-karte" aria-hidden="true"><b>Domstag</b><span><i class="punkt punkt-weizen"></i>Winterweizen A/B</span></span>
+        </button>
       </figure>
+      </div>
+      <p class="notiz notiz-karte" aria-hidden="true">293 ha, fünf Kulturen —<br>die Legende zählt mit.<svg class="notiz-pfeil" viewBox="0 0 80 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M74 6 C 52 4, 22 14, 12 48"/><path pathLength="1" d="M4 38 L 12 50 L 22 40"/></svg></p>
+      </div>
     </div>
   </section>
 
@@ -311,13 +369,19 @@
           </ul>
         </div>
 
+        <div class="buehne" style="--ton: var(--kultur-gerste)">
+        <div class="buehne-kipp">
         <figure class="schirm">
+          <div class="schirm-leiste" aria-hidden="true"><i></i><i></i><i></i><span>app.agrarkit.de/schlaege/12/umriss</span></div>
           <img src="assets/img/app/umriss.webp"
                srcset="assets/img/app/umriss-940.webp 940w, assets/img/app/umriss.webp 1504w"
                sizes="(max-width: 1000px) calc(100vw - 48px), 840px"
                width="1504" height="830" loading="lazy"
                alt="Dialog „Umriss bearbeiten“: ein Schlag über dem Luftbild mit gesetzten Punkten, rechts die Liste der Knicks mit Punktzahl und Sicherheitsabstand">
         </figure>
+        </div>
+        <p class="notiz notiz-umriss" aria-hidden="true">18,06 ha minus Knicks —<br>der Rest wird gerechnet.<svg class="notiz-pfeil" viewBox="0 0 80 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M74 6 C 52 4, 22 14, 12 48"/><path pathLength="1" d="M4 38 L 12 50 L 22 40"/></svg></p>
+        </div>
       </div>
     </div>
   </section>
@@ -349,12 +413,18 @@
           </ul>
         </div>
 
+        <div class="buehne" style="--ton: var(--kultur-hafer)">
+        <div class="buehne-kipp">
         <figure class="schirm">
+          <div class="schirm-leiste" aria-hidden="true"><i></i><i></i><i></i><span>app.agrarkit.de/schlaege/12</span></div>
           <img src="assets/img/app/schlag.webp"
                sizes="(max-width: 1000px) calc(100vw - 48px), 640px"
                width="830" height="554" loading="lazy"
                alt="Tabelle „Summen und Salden“ in Agrarkit: Düngebedarf, mineralisch, organisch, Summe und Saldo für N, P₂O₅, K₂O, MgO und S, darunter die erste Buchung des Jahres">
         </figure>
+        </div>
+        <p class="notiz notiz-schlag" aria-hidden="true">Noch 29 kg N offen.<br>Steht da, ohne Zettel.<svg class="notiz-pfeil" viewBox="0 0 80 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M74 6 C 52 4, 22 14, 12 48"/><path pathLength="1" d="M4 38 L 12 50 L 22 40"/></svg></p>
+        </div>
       </div>
     </div>
   </section>
@@ -384,12 +454,18 @@
           </div>
         </div>
 
+        <div class="buehne" style="--ton: var(--kultur-mais)">
+        <div class="buehne-kipp">
         <figure class="schirm">
+          <div class="schirm-leiste" aria-hidden="true"><i></i><i></i><i></i><span>app.agrarkit.de/endo-sh/export</span></div>
           <img src="assets/img/app/export.webp"
                sizes="(max-width: 1000px) calc(100vw - 48px), 640px"
                width="670" height="475" loading="lazy"
                alt="ENDO-SH-Export in Agrarkit: 179 Düngungen über 44 aktive Schläge, mit dem Hinweis, dass keine Umrechnungs- oder Vollständigkeitsprobleme gefunden wurden">
         </figure>
+        </div>
+        <p class="notiz notiz-export" aria-hidden="true">Erst gezählt,<br>dann exportiert.<svg class="notiz-pfeil" viewBox="0 0 80 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M74 6 C 52 4, 22 14, 12 48"/><path pathLength="1" d="M4 38 L 12 50 L 22 40"/></svg></p>
+        </div>
       </div>
     </div>
   </section>
@@ -667,5 +743,6 @@
 </footer>
 
 <script src="assets/js/bewegung.js?v=2026-09-28" defer></script>
+<script src="assets/js/kartei.js?v=2026-09-28" defer></script>
 </body>
 </html>
