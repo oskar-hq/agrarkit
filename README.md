@@ -50,7 +50,8 @@ Drei Dinge geben der Seite ein eigenes Gesicht und gehören zusammen:
 - **Die Karteikarte im Held** (`.kartei`). Papier mit blauen Linien, roter
   Kopflinie, Reiter mit Schlagnummer, Stempel „ENDO‑SH geprüft". Die Werte
   sind ein Beispiel, kein echter Betrieb. Sie bleibt in beiden Farbmodi
-  Papier und entfällt unter 1000 px.
+  Papier. Unter 1000 px rutscht sie unter den Text und schaut unten aus dem
+  ersten Bildschirm heraus.
 - **Instrument Serif kursiv** als zweite Stimme, nur für den betonten Teil
   einer Überschrift (`<em class="serif">`), nie für Fließtext oder Zahlen in
   Tabellen. Selbst gehostet wie Space Grotesk (SIL OFL), also keine
@@ -125,6 +126,17 @@ zusammen ändern.
 
 Gemessen nach dem Einbau: Layoutsprünge (CLS) 0,0007, Median 16,7 ms je Bild
 über die ganze Seite, kein Bild über 33 ms.
+
+## Versionsnummer an CSS und JS
+
+Stylesheet und Skript werden mit `?v=JJJJ-MM-TT` eingebunden, auf **allen
+vier Seiten**. GitHub Pages lässt Browser Dateien zwischenspeichern; ohne die
+Nummer zeigte Safari nach einem Update das neue HTML mit dem alten CSS. Wer
+`agrarkit.css` oder `bewegung.js` ändert, setzt das Datum neu:
+
+```
+sed -i 's/?v=[0-9-]*/?v=NEUES-DATUM/g' *.html
+```
 
 ## Hosting: GitHub Pages
 

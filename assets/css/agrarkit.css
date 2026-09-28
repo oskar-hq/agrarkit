@@ -682,9 +682,22 @@ details:not([open]) > .menue-blatt { display: none; }
   box-shadow: 0 6px 14px -8px rgba(14,22,17,.5);
 }
 
+/* Unter 1000 px rutscht die Karte unter den Text. Der Held darf dafuer
+   hoeher werden als das Fenster: die Karte schaut unten aus dem ersten
+   Bildschirm heraus und laedt zum Weiterrollen ein. Etwas kleiner und
+   knapper gesetzt, der Stempel rueckt nach innen, damit nichts ueber den
+   Fensterrand ragt. */
 @media (max-width: 1000px) {
-  .held-huelle { grid-template-columns: minmax(0, 1fr); }
-  .kartei { display: none; }
+  .held-huelle { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+  /* Mit der Karte ist der Held hoeher als das Fenster und der Text rutscht
+     nach oben — ohne die 36 px klebte die Augenbraue am Beta-Balken. */
+  .held-bild { padding-top: calc(var(--kopf) + var(--balken) + 36px); padding-bottom: 56px; }
+  .kartei { width: min(340px, calc(100% - 28px)); margin-top: 0; justify-self: start; }
+  .kartei-blatt { padding: 22px 20px 18px; }
+  .kartei-name { font-size: 1.75rem; }
+  .kartei-zeilen > div { padding: 7px 0 6px; font-size: .86rem; }
+  .kartei-stempel { right: -10px; }
+  .kartei-blatt-hinten { transform: rotate(4deg) translate(10px, 8px); }
 }
 
 /* ---------------------------------------------------------------------------
@@ -1146,6 +1159,12 @@ figure.schirm-mit-text { margin: 0; }
 .js .kartei { transform: translate3d(0, 40px, 0) rotate(2deg); }
 .js .kartei.ist-da { transform: rotate(-2.5deg) !important; }
 .kartei.ist-blende { transition-duration: 1100ms; }
+/* Auf schmalen Fenstern schaut die Karte unten aus dem ersten Bildschirm —
+   dort liegt sie gleich da. Mit Blende blieb die Luecke leer, bis man rollte,
+   denn der Beobachter loest erst aus, wenn 12 % Fenster darunter frei sind. */
+@media (max-width: 1000px) {
+  .js .kartei { opacity: 1; transform: rotate(-2.5deg); }
+}
 
 /* Parallaxe: das Bild laeuft langsamer als die Seite. Der Massstab gibt den
    Vorrat, aus dem die Verschiebung genommen wird — ohne ihn zeigte sich am
